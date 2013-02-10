@@ -62,8 +62,7 @@ function getSpotsForUser(userId){
     query.find({
         success: function(results) {
             $.each(results, function(k, v){
-                var div = '<div class="spot" data-id="' + v.get('objectId') + '">' + v.get('name') + '</div>';
-                $('.mySpots').append(div);
+                addSpotToShownList(v);
             });
         },
         error: function(error) {
@@ -72,11 +71,17 @@ function getSpotsForUser(userId){
     });
 }
 
+function addSpotToShownList(spot){
+    var div = '<div class="spot" data-id="' + spot.id + '">' + spot.get('name') + '</div>';
+    $('.mySpots').prepend(div);
+}
+
 function showListOfSpots(spots){
     
 }
 
 function saveGoogResultToSpot(userId, result){    
+    console.log(result);
     var spot = new Spot();
     spot.set('userId', userId);
     spot.set('name', result.name);
@@ -88,7 +93,9 @@ function saveGoogResultToSpot(userId, result){
     spot.set('lng', result.lng);
     spot.save(null, {
         success: function(spot) {
-        // The object was saved successfully.
+            // The object was saved successfully.
+            addSpotToShownList(spot);
+            $('#searchTextField').val('');
         },
         error: function(spot, error) {
         // The save failed.
