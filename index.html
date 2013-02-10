@@ -3,56 +3,26 @@
     <head>
         <meta charset="utf-8">
         <title>MyTown</title>
+        <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" media="all" rel="stylesheet" type="text/css"/>
         <link href="css/main.css" media="all" rel="stylesheet" type="text/css"/>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="js/underscore-1.1.6.js"></script>
         <script src="//www.parsecdn.com/js/parse-1.0.0.min.js"></script>
         <script src="js/main.js"></script>
+        <script src="js/goog.js"></script>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDVr7hka_Jl20VLLjkKE4MlldVThYVxASk&libraries=places&sensor=false"></script>
     </head>
 
     <body>
 
-        <input id="searchTextField" name="search" type="text"/>
+        <input id="searchTextField" name="search" type="text" placeholder="Search for a restaurant, park, etc..."/>
 
         <script type="text/javascript">
 
-            $(document).ready(function(){
-            
-                var latLng = new google.maps.LatLng(32.79503, -117.24142);//San Diego
-                var radius = 2000;//meters
-                var circle = new google.maps.Circle({center: latLng, radius: radius});
-                var defaultBounds= circle.getBounds();
-
-                var input = document.getElementById('searchTextField');
-                var options = {
-                    bounds: defaultBounds
-                    //,types: ['establishment']
-                };
-
-                var autocomplete = new google.maps.places.Autocomplete(input, options);
-            
-                google.maps.event.addListener(autocomplete, 'place_changed', function() {
-                    var place = autocomplete.getPlace();
-                    if (!place.geometry) {
-                        // Inform the user that a place was not found and return.
-                        return;
-                    }
-
-                    //console.log(place);
-                    var result = {
-                        name : place.name,
-                        icon : place.icon,
-                        rating : place.rating,
-                        website : place.website
-                    };
-                    console.log(result);
-                });
-            
-            });
-               
+            $(document).ready(function(){            
+                generateAutocomplete();            
+            });               
 
         </script>
-
     </body>
 </html>
