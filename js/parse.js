@@ -1,14 +1,10 @@
-
-
-
 Parse.$ = jQuery;
 
 // Initialize Parse with your Parse application javascript keys
 Parse.initialize("yaH11lzPCB3w9ExzINJfcRq34YK1u7yRuUgOPko3", "uNYybtZweTwox5bW1ETykpkNdZhvHaaQCn0BFpTU");
 
 // "Spot" Model
-// ----------
-  
+// ----------  
 var Spot = Parse.Object.extend("Spot", {
     // Default attributes.
     defaults: {
@@ -31,12 +27,11 @@ var Spot = Parse.Object.extend("Spot", {
 
 // Spot Collection
 // ---------------
-
 var SpotList = Parse.Collection.extend({
 
     // Reference to this collection's model.
     model: Spot,
-
+    
     // Filter down the list of all Spot items that are finished.
     done: function() {
     //return this.filter(function(spot){ return spot.get('done'); });
@@ -60,24 +55,30 @@ var SpotList = Parse.Collection.extend({
     }
 
 });
-  
-   
-  
-function getSpots(){
+
+function getSpotsForUser(userId){
     var query = new Parse.Query(Spot);
-    query.equalTo("playerName", "Dan Stemkoski");
+    query.equalTo("userId", userId);
     query.find({
         success: function(results) {
-            console.log(results);
+            $.each(results, function(k, v){
+                var div = '<div class="spot" data-id="' + v.get('objectId') + '">' + v.get('name') + '</div>';
+                $('.mySpots').append(div);
+            });
         },
         error: function(error) {
-            console.log("Error: " + error.code + " " + error.message);
+            console.log("Error: " + error.code + " " + error.message);            
         }
     });
 }
 
-function saveGoogResultToSpot(result){    
+function showListOfSpots(spots){
+    
+}
+
+function saveGoogResultToSpot(userId, result){    
     var spot = new Spot();
+    spot.set('userId', userId);
     spot.set('name', result.name);
     spot.set('website', result.website);
     spot.set('rating', result.rating);
@@ -95,3 +96,9 @@ function saveGoogResultToSpot(result){
         }
     });
 } 
+
+$(document).ready(function(){
+    
+    getSpotsForUser(1);
+    
+});

@@ -2,3 +2,13 @@
     margin: 10px;
     width: 400px;
 }
+.mySpots{
+    margin: 10px;
+}
+.spot{
+    margin: 5px;
+    cursor: pointer;
+}
+.spot:hover{
+    color: blue;
+}

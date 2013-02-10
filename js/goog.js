@@ -31,7 +31,6 @@ function generateAutocomplete(){
             lat : place.geometry.location.Ya,
             lng : place.geometry.location.Za
         };
-        console.log(result);
-        saveGoogResultToSpot(result);
+        saveGoogResultToSpot(1, result);
     });
 }
