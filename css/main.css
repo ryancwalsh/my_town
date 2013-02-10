@@ -12,3 +12,9 @@
 .spot:hover{
     color: blue;
 }
+#map_canvas{
+    width: 800px;
+    height: 500px;
+    margin: 10px;
+    float: right;
+}

@@ -1,8 +1,7 @@
-function generateAutocomplete(){
-    var latLng = new google.maps.LatLng(32.79503, -117.24142);//San Diego
+function generateAutocomplete(center){    
     var radius = 2000;//meters
     var circle = new google.maps.Circle({
-        center: latLng, 
+        center: center, 
         radius: radius
     });
     var defaultBounds= circle.getBounds();
@@ -33,4 +32,25 @@ function generateAutocomplete(){
         };
         saveGoogResultToSpot(1, result);
     });
+}
+
+function initializeMap(center, zoom, mapTypeId) {
+    var mapOptions = {
+        center: center,
+        zoom: zoom,
+        mapTypeId: mapTypeId
+    };
+    var map = new google.maps.Map(document.getElementById("map_canvas"),
+        mapOptions);
+    return map;
+}
+
+function addMarker(lat, lng, title, map){
+    var myLatlng = new google.maps.LatLng(lat, lng);
+    var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        title: title
+    });
+    return marker;
 }

@@ -56,13 +56,13 @@ var SpotList = Parse.Collection.extend({
 
 });
 
-function getSpotsForUser(userId){
+function getSpotsForUser(userId, map){
     var query = new Parse.Query(Spot);
     query.equalTo("userId", userId);
     query.find({
         success: function(results) {
             $.each(results, function(k, v){
-                addSpotToShownList(v);
+                addSpotToShownListAndMap(v, map);
             });
         },
         error: function(error) {
@@ -74,6 +74,15 @@ function getSpotsForUser(userId){
 function addSpotToShownList(spot){
     var div = '<div class="spot" data-id="' + spot.id + '">' + spot.get('name') + '</div>';
     $('.mySpots').prepend(div);
+}
+
+function addSpotToShownListAndMap(spot, map){
+    addSpotToShownList(spot);
+    addSpotToMap(spot, map);
+}
+
+function addSpotToMap(spot, map){    
+    return addMarker(spot.get('lat'), spot.get('lng'), spot.get('name'), map);
 }
 
 function showListOfSpots(spots){
@@ -103,9 +112,3 @@ function saveGoogResultToSpot(userId, result){
         }
     });
 } 
-
-$(document).ready(function(){
-    
-    getSpotsForUser(1);
-    
-});
