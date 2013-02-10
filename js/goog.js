@@ -53,8 +53,14 @@ function addMarker(lat, lng, title, icon, map){
     var marker = new google.maps.Marker({
         position: myLatlng,
         map: map,
-        title: title
+        title: title,
+        icon: new google.maps.MarkerImage(
+            icon,      
+            new google.maps.Size(71, 71),//size (width, height)
+            new google.maps.Point(0,0),//origin      
+            new google.maps.Point(0, 32),// anchor (the base of the flagpole at 0,32)
+            new google.maps.Size(20, 20)//scaledSize (width, height)
+            )
     });
-    marker.setIcon(icon);
     return marker;
 }
