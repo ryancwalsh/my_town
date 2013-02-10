@@ -1,3 +1,5 @@
+@colorBlue: blue;
+
 #searchTextField{
     margin: 10px;
     width: 400px;
@@ -8,10 +10,11 @@
 .spot{
     margin: 5px;
     cursor: pointer;
+    &:hover{
+        color: @colorBlue;
+    }
 }
-.spot:hover{
-    color: blue;
-}
+
 #map_canvas{
     width: 800px;
     height: 500px;
