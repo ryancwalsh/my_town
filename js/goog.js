@@ -22,13 +22,16 @@ function generateAutocomplete(){
             return;
         }
 
-        //console.log(place);
         var result = {
             name : place.name,
-            icon : place.icon,
+            website : place.website,            
             rating : place.rating,
-            website : place.website
+            address_components : place.address_components,
+            icon : place.icon,
+            lat : place.geometry.location.Ya,
+            lng : place.geometry.location.Za
         };
         console.log(result);
+        saveGoogResultToSpot(result);
     });
 }
