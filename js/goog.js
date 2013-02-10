@@ -13,7 +13,10 @@ function generateAutocomplete(center){
     };
 
     var autocomplete = new google.maps.places.Autocomplete(input, options);
-            
+    return autocomplete;
+}
+
+function addAutocompleteListener(autocomplete, map){
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
         var place = autocomplete.getPlace();
         if (!place.geometry) {
@@ -30,7 +33,7 @@ function generateAutocomplete(center){
             lat : place.geometry.location.Ya,
             lng : place.geometry.location.Za
         };
-        saveGoogResultToSpot(1, result);
+        saveGoogResultToSpot(1, result, map);
     });
 }
 
@@ -45,12 +48,13 @@ function initializeMap(center, zoom, mapTypeId) {
     return map;
 }
 
-function addMarker(lat, lng, title, map){
+function addMarker(lat, lng, title, icon, map){
     var myLatlng = new google.maps.LatLng(lat, lng);
     var marker = new google.maps.Marker({
         position: myLatlng,
         map: map,
         title: title
     });
+    marker.setIcon(icon);
     return marker;
 }

@@ -24,13 +24,28 @@
 
             $(document).ready(function(){
                 var center = new google.maps.LatLng(32.79503, -117.24142);//San Diego
-                generateAutocomplete(center);
-                var zoom = 12;//0 = out to earth level, 18 is very close in
+                var autocomplete = generateAutocomplete(center);
+                var zoom = 13;//0 = out to earth level, 18 is very close in
                 var mapTypeId = google.maps.MapTypeId.ROADMAP;//ROADMAP, SATELLITE, HYBRID, TERRAIN
                 var map = initializeMap(center, zoom, mapTypeId);
+                addAutocompleteListener(autocomplete, map);
                 getSpotsForUser(1, map);
             });               
 
         </script>
     </body>
 </html>
+<!--
+TODO:
+fix default map icon sizes
+details edit popup: notes, been there, go again, website, menu, yelp
+sass
+searching
+tags
+filtering
+styles
+goog login
+user set latLng and zoom
+map moving changes results
+Yelp link
+name-->

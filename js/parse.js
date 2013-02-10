@@ -82,14 +82,14 @@ function addSpotToShownListAndMap(spot, map){
 }
 
 function addSpotToMap(spot, map){    
-    return addMarker(spot.get('lat'), spot.get('lng'), spot.get('name'), map);
+    return addMarker(spot.get('lat'), spot.get('lng'), spot.get('name'), spot.get('icon'), map);
 }
 
 function showListOfSpots(spots){
     
 }
 
-function saveGoogResultToSpot(userId, result){    
+function saveGoogResultToSpot(userId, result, map){    
     console.log(result);
     var spot = new Spot();
     spot.set('userId', userId);
@@ -103,7 +103,7 @@ function saveGoogResultToSpot(userId, result){
     spot.save(null, {
         success: function(spot) {
             // The object was saved successfully.
-            addSpotToShownList(spot);
+            addSpotToShownListAndMap(spot, map);
             $('#searchTextField').val('');
         },
         error: function(spot, error) {
