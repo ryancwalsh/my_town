@@ -12,6 +12,7 @@
         <script src="//www.parsecdn.com/js/parse-1.0.0.min.js"></script>
         <script src="js/parse.js"></script>
         <script src="js/goog.js"></script>
+        <script src="js/main.js"></script>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDVr7hka_Jl20VLLjkKE4MlldVThYVxASk&libraries=places&sensor=false"></script>
     </head>
 
@@ -20,9 +21,26 @@
         <input id="searchTextField" name="search" type="text" placeholder="Search for a restaurant, park, etc..."/>
         <div id="map_canvas"></div>
         <div class="mySpots"></div>
+        <form id="editSpotForm">
+            <input name="name" placeholder="Name" type="text" value=""/><br/>
+            <textarea name="notes" placeholder="Notes"></textarea><br/>
+            <input name="website" placeholder="Website URL" type="text" value=""/><br/>
+            <input name="yelp" placeholder="Yelp URL" type="text" value=""/><br/>
+            <input name="menu" placeholder="Menu URL" type="text" value=""/><br/>
+            <input name="icon" placeholder="Icon URL" type="text" value=""/><br/>
+            <label for="been_there" class="checkbox">
+                <input name="been_there" type="checkbox" /> Been there?
+            </label><br/>
+            <label for="would_go_again" class="checkbox">
+                <input name="would_go_again" type="checkbox" /> Would go again?
+            </label>
+            <input name="id" type="hidden" value=""/>
+            <input name="save" type="submit" value="Save" class="btn"/>
+        </form>
         
         <script type="text/javascript">
 
+            var mySpots;
             $(document).ready(function(){
                 var center = new google.maps.LatLng(32.79503, -117.24142);//San Diego
                 var autocomplete = generateAutocomplete(center);
@@ -30,8 +48,8 @@
                 var mapTypeId = google.maps.MapTypeId.ROADMAP;//ROADMAP, SATELLITE, HYBRID, TERRAIN
                 var map = initializeMap(center, zoom, mapTypeId);
                 addAutocompleteListener(autocomplete, map);
-                getSpotsForUser(1, map);
-            });               
+                mySpots = getSpotsForUser(1, map);
+            });//end doc ready
 
         </script>
     </body>
