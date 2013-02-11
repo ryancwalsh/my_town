@@ -13,15 +13,14 @@ function addSpotToMap(spot, map){
     return addMarker(spot.get('lat'), spot.get('lng'), spot.get('name'), spot.get('icon'), map);
 }
 
-function convertSpotToForm(spot, form){    
-    form.find('input[name="id"]').val(spot.id);
-    form.find('input[name="name"]').val(spot.get('name'));
-    form.find('input[name="notes"]').val(spot.get('notes'));
-    form.find('input[name="website"]').val(spot.get('website'));
-    form.find('input[name="yelp"]').val(spot.get('yelp'));
-    form.find('input[name="menu"]').val(spot.get('menu'));
-    form.find('input[name="icon"]').val(spot.get('icon'));
-    if(spot.get('been_there')){
+function convertSpotToForm(spot, form){
+    var textFields = ['id', 'name', 'notes', 'website', 'yelp', 'menu', 'icon'];
+    $.each(textFields, function(k, v){
+        var val = typeof spot[v] == 'undefined' ? spot.get(v) : spot[v];//TODO: pull ID out of textFields array (handle separately)
+        form.find('input[name="' + v + '"]').val(val);
+    });
+    
+    if(spot.get('been_there')){//TODO: handle in loop
         form.find('input[name="been_there"]').attr('checked', 'checked');
     } else {
         form.find('input[name="been_there"]').removeAttr('checked');
@@ -36,14 +35,14 @@ function convertSpotToForm(spot, form){
 function convertFormToSpot(form){
     var id = form.find('input[name="id"]').val();
     var spot = mySpots[id];
-    spot.set('name', form.find('input[name="name"]').val());
+    spot.set('name', form.find('input[name="name"]').val());//TODO: handle in loop
     spot.set('notes', form.find('input[name="notes"]').val());
     spot.set('website', form.find('input[name="website"]').val());
     spot.set('yelp', form.find('input[name="yelp"]').val());
     spot.set('menu', form.find('input[name="menu"]').val());
     spot.set('icon', form.find('input[name="icon"]').val());
-    spot.set('been_there', form.find('input[name="been_there"]').val());
-    spot.set('would_go_again', form.find('input[name="would_go_again"]').val());
+    spot.set('been_there', form.find('input[name="been_there"]').val());//TODO: set as 1 or 0 based on 'checked'
+    spot.set('would_go_again', form.find('input[name="would_go_again"]').val());//TODO: set as 1 or 0 based on 'checked'
     return spot;
 }
 
