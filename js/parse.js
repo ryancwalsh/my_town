@@ -89,6 +89,7 @@ function saveGoogResultToSpot(userId, result, map){
         success: function(spot) {
             // The object was saved successfully.
             addSpotToShownListAndMap(spot, map);
+            mySpots[spot.id] = spot;
             $('#searchTextField').val('');
         },
         error: function(spot, error) {
