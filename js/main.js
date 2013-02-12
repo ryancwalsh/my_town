@@ -14,35 +14,39 @@ function addSpotToMap(spot, map){
 }
 
 function convertSpotToForm(spot, form){
-    var textFields = ['id', 'name', 'notes', 'website', 'yelp', 'menu', 'icon'];
+    form.find('input[name="id"]').val(spot['id']);
+    var textFields = ['name', 'notes', 'website', 'yelp', 'menu', 'icon'];
     $.each(textFields, function(k, v){
-        var val = typeof spot[v] == 'undefined' ? spot.get(v) : spot[v];//TODO: pull ID out of textFields array (handle separately)
-        form.find('input[name="' + v + '"]').val(val);
+        form.find('input[name="' + v + '"]').val(spot.get(v));
     });
     
-    if(spot.get('been_there')){//TODO: handle in loop
-        form.find('input[name="been_there"]').attr('checked', 'checked');
-    } else {
-        form.find('input[name="been_there"]').removeAttr('checked');
-    }
-    if(spot.get('would_go_again')){
-        form.find('input[name="would_go_again"]').attr('checked', 'checked');    
-    } else {
-        form.find('input[name="would_go_again"]').removeAttr('checked');
-    }
+    var checkboxes = ['been_there', 'would_go_again'];
+    $.each(checkboxes, function(k, v){
+        var field = form.find('input[name="' + v + '"]');
+        var checked = 'checked';
+        if(spot.get(v)){
+            field.attr(checked, checked);
+        } else {
+            field.removeAttr(checked);
+        }
+    });
 }
 
 function convertFormToSpot(form){
     var id = form.find('input[name="id"]').val();
     var spot = mySpots[id];
-    spot.set('name', form.find('input[name="name"]').val());//TODO: handle in loop
-    spot.set('notes', form.find('input[name="notes"]').val());
-    spot.set('website', form.find('input[name="website"]').val());
-    spot.set('yelp', form.find('input[name="yelp"]').val());
-    spot.set('menu', form.find('input[name="menu"]').val());
-    spot.set('icon', form.find('input[name="icon"]').val());
-    spot.set('been_there', form.find('input[name="been_there"]').val());//TODO: set as 1 or 0 based on 'checked'
-    spot.set('would_go_again', form.find('input[name="would_go_again"]').val());//TODO: set as 1 or 0 based on 'checked'
+    var textFields = ['name', 'notes', 'website', 'yelp', 'menu', 'icon'];
+    $.each(textFields, function(k, v){
+        spot.set(v, form.find('input[name="' + v + '"]').val());
+    });
+    var checkboxes = ['been_there', 'would_go_again'];
+    $.each(checkboxes, function(k, v){
+        var field = form.find('input[name="' + v + '"]');        
+        var bool = field.is(':checked') ? 1 : 0;
+        console.log(bool);
+        spot.set(v, bool);
+    });
+    console.log(spot);
     return spot;
 }
 
