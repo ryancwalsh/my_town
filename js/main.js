@@ -42,11 +42,9 @@ function convertFormToSpot(form){
     var checkboxes = ['been_there', 'would_go_again'];
     $.each(checkboxes, function(k, v){
         var field = form.find('input[name="' + v + '"]');        
-        var bool = field.is(':checked') ? 1 : 0;
-        console.log(bool);
+        var bool = field.is(':checked');
         spot.set(v, bool);
     });
-    console.log(spot);
     return spot;
 }
 
@@ -61,7 +59,18 @@ $(document).ready(function(){
         event.preventDefault();
         var form = $(this);
         var spot = convertFormToSpot(form);
-        spot.save();
+        spot.save(null, {
+            success: function(data) {
+                // The save was successful.
+                console.log(data);
+            },
+            error: function(data, error) {
+                // The save failed.  Error is an instance of Parse.Error.
+                console.log(data);
+                console.log(error);
+            }
+        }
+        );
     });
 
 });//end doc ready
