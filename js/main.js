@@ -45,6 +45,12 @@ function convertFormToSpot(form){
         var bool = field.is(':checked');
         spot.set(v, bool);
     });
+    var relation = spot.relation("tags");
+    var tagValues = ['food'];
+    $.each(tagValues, function(k, v){
+        var tag = tags[0];
+        relation.add(tag);
+    });
     return spot;
 }
 
