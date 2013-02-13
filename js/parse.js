@@ -6,10 +6,23 @@ Parse.initialize("yaH11lzPCB3w9ExzINJfcRq34YK1u7yRuUgOPko3", "uNYybtZweTwox5bW1E
 //-----------------------------------------------------------------------------------
 //TODO: replace this temporary section
 var tempUserObj;
+var tags = [];
 Parse.User.logIn('rcwalsh', 'parse', {
     success: function(user) {
         tempUserObj = user;
-        console.log(tempUserObj);
+        console.log(tempUserObj);        
+        var query = new Parse.Query(Tag);
+        query.equalTo("user", user);
+        query.find({
+            success: function(results) {
+                tags = results;
+                console.log(tags);
+                addTagForUserIfNew('water', user, tags);
+            },
+            error: function(error) {
+                console.log("Error: " + error.code + " " + error.message);            
+            }
+        });
     },
 
     error: function(user, error) {
@@ -71,6 +84,46 @@ var SpotList = Parse.Collection.extend({
     }
 
 });
+
+
+// "Tag" Model
+// ----------  
+var Tag = Parse.Object.extend("Tag", {
+    
+    });
+
+function tagExistsForUser(tagValue, tags){
+    var result = false;
+    $.each(tags, function(k, v){
+        if(tagValue == v.get('value')){//TODO: make it looser match
+            result = true;
+            return;
+        }        
+    });
+    return result;
+}
+
+function addTagForUserIfNew(tagValue, user, tags){
+    if(!tagExistsForUser(tagValue, tags)){
+        var tag = new Tag();
+        tag.set('user', user);
+        tag.set('ACL', new Parse.ACL(user));
+        tag.set('value', tagValue);    
+        tag.save(null, {
+            success: function(tag) {
+                // The object was saved successfully.
+                tags.push(tag);
+                console.log(tags);
+            },
+            error: function(tag, error) {
+            // The save failed.
+            // error is a Parse.Error with an error code and description.
+            }
+        });
+    } else {
+        console.log('tag existed already');
+    }
+}
 
 function getSpotsForUser(user, map){
     var mySpots = {};
