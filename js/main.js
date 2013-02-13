@@ -53,6 +53,7 @@ $(document).ready(function(){
         var id = $(this).attr('data-id');
         var form = $('#editSpotForm');
         convertSpotToForm(mySpots[id], form);
+        $('#editSpotForm').show();
     });
     
     $('#editSpotForm').submit(function(event){

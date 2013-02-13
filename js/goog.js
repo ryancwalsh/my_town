@@ -33,7 +33,7 @@ function addAutocompleteListener(autocomplete, map){
             lat : place.geometry.location.Ya,
             lng : place.geometry.location.Za
         };
-        saveGoogResultToSpot(1, result, map);
+        saveGoogResultToSpot(tempUserObj, result, map);
     });
 }
 

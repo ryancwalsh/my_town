@@ -3,6 +3,22 @@ Parse.$ = jQuery;
 // Initialize Parse with your Parse application javascript keys
 Parse.initialize("yaH11lzPCB3w9ExzINJfcRq34YK1u7yRuUgOPko3", "uNYybtZweTwox5bW1ETykpkNdZhvHaaQCn0BFpTU");
 
+//-----------------------------------------------------------------------------------
+//TODO: replace this temporary section
+var tempUserObj;
+Parse.User.logIn('rcwalsh', 'parse', {
+    success: function(user) {
+        tempUserObj = user;
+        console.log(tempUserObj);
+    },
+
+    error: function(user, error) {
+         
+    }
+});
+//-----------------------------------------------------------------------------------
+
+
 // "Spot" Model
 // ----------  
 var Spot = Parse.Object.extend("Spot", {
@@ -56,10 +72,10 @@ var SpotList = Parse.Collection.extend({
 
 });
 
-function getSpotsForUser(userId, map){
+function getSpotsForUser(user, map){
     var mySpots = {};
     var query = new Parse.Query(Spot);
-    query.equalTo("userId", userId);
+    query.equalTo("user", user);
     query.find({
         success: function(results) {
             $.each(results, function(k, v){
@@ -74,10 +90,11 @@ function getSpotsForUser(userId, map){
     return mySpots;
 }
 
-function saveGoogResultToSpot(userId, result, map){    
+function saveGoogResultToSpot(user, result, map){    
     console.log(result);
     var spot = new Spot();
-    spot.set('userId', userId);
+    spot.set('user', user);
+    spot.set('ACL', new Parse.ACL(user));
     spot.set('name', result.name);
     spot.set('website', result.website);
     spot.set('rating', result.rating);
