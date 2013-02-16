@@ -15,6 +15,20 @@ function addSpotToMap(spot, map){
 }
 
 function convertSpotToForm(spot, form){
+    spot.relation("tags").query().find({
+        success : function(results){
+            console.log(results);
+            var tags = [];
+            $.each(results, function(k, v){
+                tags.push(v.get('value'));
+            });
+            var commaList = tags.join(', ');
+            form.find('input[name="tags"]').importTags(commaList);
+        },
+        error : function(error) {
+            alert("Error: " + error.code + " " + error.message);
+        }
+    });
     form.find('input[name="id"]').val(spot['id']);
     var textFields = ['name', 'notes', 'website', 'yelp', 'menu', 'icon'];
     $.each(textFields, function(k, v){
