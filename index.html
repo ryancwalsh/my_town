@@ -18,8 +18,9 @@
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDVr7hka_Jl20VLLjkKE4MlldVThYVxASk&libraries=places&sensor=false"></script>
         <script type="text/javascript">
             var oneall_js_protocol = (("https:" == document.location.protocol) ? "https" : "http");
-            document.write(unescape("%3Cscript src='" + oneall_js_protocol + "://fxn360.api.oneall.com/socialize/library.js' type='text/javascript'%3E%3C/script%3E"));
+            document.write(unescape("%3Cscript src='" + oneall_js_protocol + "://fxn360.api.oneall.com/socialize/library.js' type='text/javascript'%3E%3C/script%3E"));//TODO: change OneAll subdomain/app name.
         </script>
+        <script src="js/data_migration.js"></script>
     </head>
 
     <body>
@@ -57,7 +58,7 @@
                 var mapTypeId = google.maps.MapTypeId.ROADMAP;//ROADMAP, SATELLITE, HYBRID, TERRAIN
                 var map = initializeMap(center, zoom, mapTypeId);
                 addAutocompleteListener(autocomplete, map);
-                mySpots = getSpotsForUser(tempUserObj, map);
+                mySpots = getSpotsForUser(tempUserObj, map);                
                 $('input[name="tags"]').tagsInput({
                     width: 400,
                     height: 40
@@ -80,7 +81,7 @@ tags
 filtering
 clicking icon on map should show details of that Spot
 ACLs
-goog login
+goog login, OneAll, or js-based flexible openId login?
 styles / UX
 tutorials / flow
 pagination

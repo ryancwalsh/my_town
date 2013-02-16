@@ -9,8 +9,9 @@ function addSpotToShownListAndMap(spot, map){
     addSpotToMap(spot, map);
 }
 
-function addSpotToMap(spot, map){    
-    return addMarker(spot.get('lat'), spot.get('lng'), spot.get('name'), spot.get('icon'), map);
+function addSpotToMap(spot, map){
+    var geoPoint = spot.get('geoPoint');
+    return addMarker(geoPoint.latitude, geoPoint.longitude, spot.get('name'), spot.get('icon'), map);
 }
 
 function convertSpotToForm(spot, form){

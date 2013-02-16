@@ -153,8 +153,7 @@ function saveGoogResultToSpot(user, result, map){
     spot.set('rating', result.rating);
     spot.set('address_components', result.address_components);
     spot.set('icon', result.icon);
-    spot.set('lat', result.lat);
-    spot.set('lng', result.lng);
+    spot.set('geoPoint', new Parse.GeoPoint({latitude: result.lat, longitude: result.lng}));
     spot.save(null, {
         success: function(spot) {
             // The object was saved successfully.
