@@ -16,8 +16,6 @@ Parse.User.logIn('rcwalsh', 'parse', {
         query.find({
             success: function(results) {
                 tags = results;
-                console.log(tags);
-                addTagForUserIfNew('water', user, tags);
             },
             error: function(error) {
                 console.log("Error: " + error.code + " " + error.message);            
