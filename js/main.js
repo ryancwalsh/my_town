@@ -54,6 +54,7 @@ $(document).ready(function(){
     });
     
     $('#editSpotForm').submit(function(event){
+        var user = tempUserObj;
         event.preventDefault();
         var form = $(this);
         var id = form.find('input[name="id"]').val();
@@ -84,38 +85,54 @@ $(document).ready(function(){
         function(error) {
             console.log("Error: " + error.code + " " + error.message);
         }).then(function(){
-            //Add Tags to Spot if Tag exists in input field but not Spot:
-            $.each(tagValues, function(k, v){
-                //TODO: If this Tag does not yet exist for this user, create it.
-                //TODO: Add the relation of the Tag to this Spot.
-                var tag = new Tag();
-                tag.set('user', user);
-                tag.set('ACL', new Parse.ACL(user));
-                tag.set('value', tagValue);    
-                tag.save(null).then(function(tag) {
-                    // The object was saved successfully.
-                    tags.push(tag);
-                    console.log(tags);
-                },
-                function(tag, error) {
-                    // The save failed.
-                    // error is a Parse.Error with an error code and description.
-                    console.log("Error: " + error.code + " " + error.message);
+            var tags = [];
+            var query = new Parse.Query(Tag);
+            query.equalTo("user", user);
+            query.find().then(function(results) {
+                $.each(results, function(k, v){
+                    tags.push(v);
                 });
-            //var tag = tags[0];
-            //relation.add(tag);
+                console.log(tags);
+            }, standardError).then(function(){
+                //Add Tags to Spot if Tag exists in input field but not Spot:
+                $.each(tagValues, function(k, v){
+                    console.log(tags);
+                    var tag = getTag(v, tags);
+                    if(tag) {
+                        //Add the relation of the Tag to this Spot.                
+                        console.log('Tag already existed, so adding relation.');
+                        relation.add(tag);
+                    } else {
+                        //If this Tag does not yet exist for this user, create it.
+                        tag = new Tag();
+                        tag.set('user', user);
+                        tag.set('ACL', new Parse.ACL(user));
+                        tag.set('value', v);
+                        console.log('Created new Tag.');
+                        tag.save().then(function(tag) {
+                            //Add the relation of the Tag to this Spot.                
+                            console.log('Saved Tag. Adding relation.');
+                            relation.add(tag);
+                        }, standardError);
+                    }                
+                });
+            }, standardError).then(function(){
+                console.log(spot);
+                spot.save().then(function(data) {                    
+                    console.log('Saved Spot.');
+                }, standardError);
             });
-        }).then(function(){
-            spot.save(null).then(function(data) {
-                // The save was successful.
-                console.log(data);
-            },
-            function(data, error) {
-                // The save failed.  Error is an instance of Parse.Error.
-                console.log(data);
-                console.log(error);
-            });
-        });        
+        });
     });
+    
+    function getTag(tagValue, tags){
+        var matchingTag = false;
+        $.each(tags, function(k, v){
+            if(v.get('value').toUpperCase() == tagValue.toUpperCase()){
+                matchingTag = v;
+            }
+        });
+        return matchingTag;
+    }
     
 });//end doc ready
