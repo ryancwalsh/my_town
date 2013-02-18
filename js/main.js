@@ -71,12 +71,12 @@ $(document).ready(function(){
         });
         var checkboxes = ['been_there', 'would_go_again'];
         $.each(checkboxes, function(k, v){
-            var field = form.find('input[name="' + v + '"]');        
+            var field = form.find('input[name="' + v + '"]');
             var bool = field.is(':checked');
             spot.set(v, bool);
-        });        
+        });
         var tagValues = form.find('input[name="tags"]').val().split(',');
-        handleTags(spot, tagValues, tempUserObj);
+        updateTagRelationsToSpot(spot, tagValues, tempUserObj);
     });
         
 });//end doc ready

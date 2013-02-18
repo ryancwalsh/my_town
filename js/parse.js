@@ -66,52 +66,55 @@ function saveGoogResultToSpot(user, result, map){
     );
 }
 
-function handleTags(spot, tagValues, user){
-    var relation = spot.relation("tags");    
+function updateTagRelationsToSpot(spot, tagValuesFromInputBox, user){
+    var relation = spot.relation("tags");
+    var relationsToAdd = [];
     relation.query().find().then(function(results){
         $.each(results, function(k, v){//Loop through all Tags related to this Spot in the db.
             console.log(v.get('value'));
-            if ($.inArray(v.get('value'), tagValues) === -1){
+            if ($.inArray(v.get('value'), tagValuesFromInputBox) === -1){//TODO: allow case-insensitive matches?
                 console.log('remove');
                 relation.remove(v);//Remove Tag from Spot if no longer in input field.
             //TODO: if this Tag is no longer related to any Spots, delete the Tag completely.
             }
         });
     }, logErr).then(function(){
-        var tagsAlreadyInDb = [];
         var query = new Parse.Query(Tag);
         query.equalTo("user", user);
-        query.find().then(function(results) {//Find all Tags of this User (not just for this Spot) in the db and put them into tagsAlreadyInDb array.
-            $.each(results, function(k, v){
-                tagsAlreadyInDb.push(v);
-            });
-        }, logErr).then(function(){            
-            $.each(tagValues, function(k, v){//Loop through each of the Tag values provided in the input box.
-                console.log(tagsAlreadyInDb);
-                var tag = getTag(v, tagsAlreadyInDb);
-                if(tag) {//If Tag already exists in db, just add relation to Spot.
-                    //Add the relation of the Tag to this Spot.                
-                    console.log('Tag already existed, so adding relation.');
-                    relation.add(tag);
-                } else {
-                    //If this Tag does not yet exist for this user, create it. (We'll soon add a relation to the Spot.)
-                    tag = new Tag();
-                    tag.set('user', user);
-                    tag.set('ACL', new Parse.ACL(user));
-                    tag.set('value', v);
-                    console.log('Created new Tag.');
-                    tag.save().then(function() {
-                        //Add the relation of the Tag to this Spot.                
-                        console.log('Saved Tag. Adding relation.');
-                        relation.add(tag);//TODO: figure out how to postpone save of Spot until this save of Tag is finished.
-                    }, logErr);
-                }                
-            });
-        }, logErr).then(function(){
-            console.log(spot);
-            spot.save().then(function(data) {                    
-                console.log('Saved Spot.');
-            }, logErr);
+        return query.find();//Find all Tags of this User (not just for this Spot) in the db and put them into tagsAlreadyInDb array.
+    }, logErr).then(function(tagsAlreadyInDb) {
+        console.log(tagsAlreadyInDb);
+        var tagsFinishedSaving = [];        
+        $.each(tagValuesFromInputBox, function(k, v){//Loop through each of the Tag values provided in the input box.                
+            var tag = getTag(v, tagsAlreadyInDb);
+            if(tag) {//If Tag already exists in db, just add relation to Spot.                
+                console.log('Tag already existed, so adding relation.');
+                relation.add(tag);//Add the relation of the Tag to this Spot.
+            } else {            
+                tagsFinishedSaving.push(createNewTag(user, v));//If this Tag does not yet exist for this user, create it. (We'll soon add a relation to the Spot.)
+            }                
         });
-    });
+        return tagsFinishedSaving;
+    }, logErr).then(function(tagsFinishedSaving){
+        $.each(tagsFinishedSaving, function(k, v){
+            console.log(v);
+            console.log(v['_result']);
+            var tag = v['result'];
+            console.log(tag);//TODO: figure out how to get the Tag from within each Promise.
+            relation.add(tag);//Add the relation of the Tag to this Spot.
+        });     
+        spot.save().then(function(data) {                    
+            console.log('Saved Spot.');
+        }, logErr);        
+    }, logErr);
+    
+    function createNewTag(user, tagValue){
+        var tag = new Tag();
+        tag.set('user', user);
+        tag.set('ACL', new Parse.ACL(user));
+        tag.set('value', tagValue);
+        console.log('Saving new Tag "' + tagValue + '"...');
+        return tag.save();
+    }
+    
 }
