@@ -61,7 +61,6 @@ $(document).ready(function(){
     });
     
     $('#editSpotForm').submit(function(event){
-        var user = tempUserObj;
         event.preventDefault();
         var form = $(this);
         var id = form.find('input[name="id"]').val();
@@ -77,7 +76,7 @@ $(document).ready(function(){
             spot.set(v, bool);
         });        
         var tagValues = form.find('input[name="tags"]').val().split(',');
-        handleTags(spot, tagValues, user);
+        handleTags(spot, tagValues, tempUserObj);
     });
         
 });//end doc ready
