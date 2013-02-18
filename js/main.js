@@ -21,6 +21,7 @@ function convertSpotToForm(spot, form){
         $.each(results, function(k, v){
             tags.push(v.get('value'));
         });
+        tags.sort();
         var commaList = tags.join(', ');
         form.find('input[name="tags"]').importTags(commaList);
     }, logErr);
