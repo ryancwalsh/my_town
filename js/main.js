@@ -77,6 +77,7 @@ $(document).ready(function(){
                 if ($.inArray(v.get('value'), tagValues) === -1){
                     console.log('remove');
                     relation.remove(v);
+                //TODO: if this Tag is no longer related to any Spots, delete the Tag completely.
                 }
             });
         },
@@ -85,22 +86,35 @@ $(document).ready(function(){
         }).then(function(){
             //Add Tags to Spot if Tag exists in input field but not Spot:
             $.each(tagValues, function(k, v){
-                //var tag = tags[0];
-                //relation.add(tag);
-                });
-        }).then(function(){
-            spot.save(null, {
-                success: function(data) {
-                    // The save was successful.
-                    console.log(data);
+                //TODO: If this Tag does not yet exist for this user, create it.
+                //TODO: Add the relation of the Tag to this Spot.
+                var tag = new Tag();
+                tag.set('user', user);
+                tag.set('ACL', new Parse.ACL(user));
+                tag.set('value', tagValue);    
+                tag.save(null).then(function(tag) {
+                    // The object was saved successfully.
+                    tags.push(tag);
+                    console.log(tags);
                 },
-                error: function(data, error) {
-                    // The save failed.  Error is an instance of Parse.Error.
-                    console.log(data);
-                    console.log(error);
-                }
-            }
-            );
+                function(tag, error) {
+                    // The save failed.
+                    // error is a Parse.Error with an error code and description.
+                    console.log("Error: " + error.code + " " + error.message);
+                });
+            //var tag = tags[0];
+            //relation.add(tag);
+            });
+        }).then(function(){
+            spot.save(null).then(function(data) {
+                // The save was successful.
+                console.log(data);
+            },
+            function(data, error) {
+                // The save failed.  Error is an instance of Parse.Error.
+                console.log(data);
+                console.log(error);
+            });
         });        
     });
     
