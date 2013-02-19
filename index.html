@@ -16,17 +16,11 @@
         <script src="js/goog.js"></script>
         <script src="js/main.js"></script>
         <script src="js/jquery.tagsinput.js"></script>
-        <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyDVr7hka_Jl20VLLjkKE4MlldVThYVxASk&libraries=places&sensor=false"></script>
-        <script type="text/javascript">
-            var oneall_js_protocol = (("https:" == document.location.protocol) ? "https" : "http");
-            document.write(unescape("%3Cscript src='" + oneall_js_protocol + "://fxn360.api.oneall.com/socialize/library.js' type='text/javascript'%3E%3C/script%3E"));//TODO: change OneAll subdomain/app name.
-        </script>
+        <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyDVr7hka_Jl20VLLjkKE4MlldVThYVxASk&libraries=places&sensor=false"></script>     
         <script src="js/data_migration.js"></script>
     </head>
 
     <body>
-        Sign in using: 
-        <div id="social_login_container"></div>
         <input id="addSpot" type="button" value="Add Spot" class="btn"/>
         <input id="searchTextField" name="search" type="text" placeholder="Search for a restaurant, park, etc..."/>
         <input id="searchMySpots" name="searchMySpots" type="text" placeholder="Search my Spots..."/>
@@ -68,13 +62,7 @@
                 $('div.tagsinput input').typeahead({//http://twitter.github.com/bootstrap/javascript.html#typeahead
                     source: tagsInputAutocompleteArray
                 });
-
-                oneall.api.plugins.social_login.build("social_login_container", {                    
-                    'providers' :  ['google', 'facebook', 'openid'], //'linkedin', 'twitter', 'yahoo'
-                    //'css_theme_uri': 'https://oneallcdn.com/css/api/socialize/themes/buildin/signin/large-v1.css',
-                    'grid_size_x': '3',
-                    'callback_uri': 'https://yaH11lzPCB3w9ExzINJfcRq34YK1u7yRuUgOPko3:javascript-key=uNYybtZweTwox5bW1ETykpkNdZhvHaaQCn0BFpTU@api.parse.com/1/functions/oneAllCallback'//https://www.parse.com/questions/reading-post-variables-in-parse-cloud-code
-                });
+                
             });//end doc ready
 
         </script>
@@ -82,11 +70,11 @@
 </html>
 <!--
 TODO:
+goog login
+ACLs
 enough layout for filtering by search and tag
 filtering by search and tag
 clicking icon on map should show details of that Spot
-ACLs
-goog login, OneAll, or js-based flexible openId login?
 styles / UX
 allow clicking Bootstrap Typeahead for tags, not just pressing Enter (might need to edit jquery.tagsinput.js)
 tutorials / flow
@@ -99,6 +87,8 @@ Yelp link
 name
 archive Spot
 archive entire Tag
+how to make money
+facebook login?
 rename entire Tag
 unarchive stuff
 -->
