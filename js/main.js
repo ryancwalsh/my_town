@@ -91,5 +91,10 @@ $(document).ready(function(){
         var tagValues = form.find('input[name="tags"]').val().split(',');
         updateTagRelationsToSpot(spot, tagValues, tempUserObj);
     });
+    
+    $('#addSpot').click(function(){
+        $(this).hide();
+        $('#searchTextField').show().focus();
+    });
         
 });//end doc ready
