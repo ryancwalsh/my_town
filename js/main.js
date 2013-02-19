@@ -14,6 +14,18 @@ function addSpotToMap(spot, map){
     return addMarker(geoPoint.latitude, geoPoint.longitude, spot.get('name'), spot.get('icon'), map);
 }
 
+function inArrayCaseInsensitive(needle, haystackArray){
+    //Iterates over an array of items to return the index of the first item that matches the provided val ('needle') in a case-insensitive way.  Returns -1 if no match found.
+    var defaultResult = -1;
+    var result = defaultResult;
+    $.each(haystackArray, function(index, value) { 
+        if (result == defaultResult && value.toLowerCase() == needle.toLowerCase()) {
+            result = index;
+        }
+    });
+    return result;
+}
+
 function convertSpotToForm(spot, form){
     spot.relation("tags").query().find().then(function(results){
         console.log(results);

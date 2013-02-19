@@ -7,12 +7,19 @@ function logErr(data, error) {
     console.log("Error: " + error.code + " " + error.message);
     console.log(data);
 }
+var tagsInputAutocompleteArray = [];
 //-----------------------------------------------------------------------------------
 //TODO: replace this temporary section
 var tempUserObj;
 Parse.User.logIn('rcwalsh', 'parse', {}).then(function(user) {
     tempUserObj = user;
     console.log(tempUserObj);
+    getTagsForUser(user).then(function(tags){
+        $.each(tags, function(k, v){
+            tagsInputAutocompleteArray.push(v.get('value'));
+        });
+        tagsInputAutocompleteArray.sort();
+    }, logErr);
 }, logErr);
 //-----------------------------------------------------------------------------------
 
@@ -64,21 +71,25 @@ function saveGoogResultToSpot(user, result, map){
     }, logErr);
 }
 
+function getTagsForUser(user){
+    var query = new Parse.Query(Tag);
+    query.equalTo("user", user);
+    return query.find();//Find all Tags of this User (not just for this Spot) in the db and put them into tagsAlreadyInDb array.
+}
+
 function updateTagRelationsToSpot(spot, tagValuesFromInputBox, user){
     var relation = spot.relation("tags");
     relation.query().find().then(function(results){
         $.each(results, function(k, v){//Loop through all Tags related to this Spot in the db.
             console.log(v.get('value'));
-            if ($.inArray(v.get('value'), tagValuesFromInputBox) === -1){//TODO: allow case-insensitive matches?
+            if (inArrayCaseInsensitive(v.get('value'), tagValuesFromInputBox) === -1){
                 console.log('remove');
                 relation.remove(v);//Remove Tag from Spot if no longer in input field.
             //TODO: if this Tag is no longer related to any Spots, delete the Tag completely.
             }
         });
     }, logErr).then(function(){
-        var query = new Parse.Query(Tag);
-        query.equalTo("user", user);
-        return query.find();//Find all Tags of this User (not just for this Spot) in the db and put them into tagsAlreadyInDb array.
+        return getTagsForUser(user);
     }, logErr).then(function(tagsAlreadyInDb) {
         console.log(tagsAlreadyInDb);
         var tagsFinishedSaving = [];        
@@ -111,6 +122,8 @@ function updateTagRelationsToSpot(spot, tagValuesFromInputBox, user){
         tag.save().then(function(){
             relation.add(tag);//Add the relation of the Tag to this Spot.
             savedTagPromise.resolve(true);
+            tagsInputAutocompleteArray.push(tagValue);
+            tagsInputAutocompleteArray.sort();
         }, logErr);
     }
     
