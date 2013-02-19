@@ -1,5 +1,7 @@
 /* Simple Google API OAuth 2.0 Client flow library
 
+Ryan Walsh made edits below. Search for "Walsh".
+
   Author: timdream
 
   Usage:
@@ -54,9 +56,15 @@
             if (!f_client_id) return false;
             if (f_scope) scope = f_scope;
             client_id = f_client_id;
+            console.log(client_id);            
+            if(typeof f_redirect_uri !== 'undefined'){//Ryan Walsh added this IF block on 2013-02-19.
+                redirect_uri = f_redirect_uri;
+            }
+            console.log(redirect_uri);
         },
         // receive token from popup
         receiveToken: function (token, expires_in) {
+            console.log('receiveToken: ' + token);
             if (token !== 'ERROR') {
                 access_token = token;
                 if (callbackWaitForToken) callbackWaitForToken(access_token);
