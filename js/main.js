@@ -73,7 +73,7 @@ function getTag(tagValue, tags){
 
 $(document).ready(function(){
     
-    $('#federatedSignupLogin').click(function(){
+    $('#federatedSignupLogin').click(function(e){        
         //Prompt visitor to provide federated login credentials:
         console.log('Prompt visitor');
         GO2.getToken(function(acToken){                        
@@ -115,7 +115,8 @@ $(document).ready(function(){
                 },
                 dataType: "jsonp"
             });
-        }); 
+        });
+        e.preventDefault();
     });
     
     
