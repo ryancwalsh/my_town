@@ -1,3 +1,9 @@
+var client_id = '307764999314.apps.googleusercontent.com';
+var scope = 'https://www.googleapis.com/auth/userinfo.email';//Could also ask for https://www.googleapis.com/auth/userinfo.profile with a space between it and the email scope URL.
+GO2.init(client_id, scope);
+function getPassword(federatedLoginUser){
+    return federatedLoginUser.id;//TODO: make it a hash of something
+}
 
 function addSpotToShownList(spot){
     var div = '<div class="spot" data-id="' + spot.id + '">' + spot.get('name') + '</div>';
@@ -82,6 +88,7 @@ $(document).ready(function(){
                     Parse.User.logIn(federatedLoginUser.email, getPassword(federatedLoginUser), {
                         success: function(user) {
                             console.log(user);
+                            afterSigningIn();
                         },
                         error: function (data, error) {                
                             console.log("Error: " + error.code + " " + error.message);
@@ -105,6 +112,29 @@ $(document).ready(function(){
                 dataType: "jsonp"
             });
         }); 
+    });
+    
+    
+    var federatedLoginUser;
+    if (currentUser) {
+        afterSigningIn();
+    }
+    
+    function afterSigningIn(){
+        $('#mainContent').show();
+        $('#signOut').show();
+        $('#federatedSignupLogin').hide();
+        getTagsForUser(currentUser).then(function(tags){
+            $.each(tags, function(k, v){
+                tagsInputAutocompleteArray.push(v.get('value'));
+            });
+            tagsInputAutocompleteArray.sort();
+        }, logErr);
+    }
+
+    $('#signOut').click(function(){
+        Parse.User.logOut();
+        window.location.reload(false);
     });
 
     $('.mySpots .spot').live('click', function(){

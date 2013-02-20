@@ -2,37 +2,13 @@ Parse.$ = jQuery;
 
 // Initialize Parse with your Parse application javascript keys
 Parse.initialize("yaH11lzPCB3w9ExzINJfcRq34YK1u7yRuUgOPko3", "uNYybtZweTwox5bW1ETykpkNdZhvHaaQCn0BFpTU");
-var client_id = '307764999314.apps.googleusercontent.com';
-var scope = 'https://www.googleapis.com/auth/userinfo.email';//Could also ask for https://www.googleapis.com/auth/userinfo.profile with a space between it and the email scope URL.
-GO2.init(client_id, scope);
+
 function logErr(data, error) {                
     console.log("Error: " + error.code + " " + error.message);
     console.log(data);
 }
-function getPassword(federatedLoginUser){
-    return federatedLoginUser.id;//TODO: make it a hash of something
-}
+
 var tagsInputAutocompleteArray = [];
-//-----------------------------------------------------------------------------------
-var currentUser = Parse.User.current();
-console.log(currentUser);
-var federatedLoginUser;
-if (currentUser) {
-    console.log('in');
-    $('#mainContent').show();
-    $('#signOut').show();
-    $('#federatedSignupLogin').hide();
-    getTagsForUser(currentUser).then(function(tags){
-        $.each(tags, function(k, v){
-            tagsInputAutocompleteArray.push(v.get('value'));
-        });
-        tagsInputAutocompleteArray.sort();
-    }, logErr);
-} 
-
-//-----------------------------------------------------------------------------------
-
-
 // "Spot" Model
 // ----------  
 var Spot = Parse.Object.extend("Spot", {
@@ -44,6 +20,8 @@ var Spot = Parse.Object.extend("Spot", {
 var Tag = Parse.Object.extend("Tag", {
     
     });
+var currentUser = Parse.User.current();
+//-----------------------------------------------------------------------------------
 
 function getSpotsForUser(user, map){//TODO: this isn't the way to handle an async func call
     var mySpots = {};
@@ -81,6 +59,7 @@ function saveGoogResultToSpot(user, result, map){
 }
 
 function getTagsForUser(user){
+    console.log(user);
     var query = new Parse.Query(Tag);
     query.equalTo("user", user);
     return query.find();//Find all Tags of this User (not just for this Spot) in the db and put them into tagsAlreadyInDb array.
