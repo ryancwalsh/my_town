@@ -23,15 +23,15 @@ function addAutocompleteListener(autocomplete, map){
             // Inform the user that a place was not found and return.
             return;
         }
-
+        console.log(place);
         var result = {
             name : place.name,
             website : place.website,            
             rating : place.rating,
             address_components : place.address_components,
             icon : place.icon,
-            lat : place.geometry.location.Ya,
-            lng : place.geometry.location.Za
+            lat : place.geometry.location.lat(),
+            lng : place.geometry.location.lng()
         };
         saveGoogResultToSpot(currentUser, result, map);
     });

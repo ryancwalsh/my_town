@@ -2,7 +2,7 @@ var client_id = '307764999314.apps.googleusercontent.com';
 var scope = 'https://www.googleapis.com/auth/userinfo.email';//Could also ask for https://www.googleapis.com/auth/userinfo.profile with a space between it and the email scope URL.
 GO2.init(client_id, scope);
 function getPassword(federatedLoginUser){
-    return federatedLoginUser.id;//TODO: make it a hash of something
+    return federatedLoginUser.id;//TODO: see http://stackoverflow.com/questions/3715920/about-password-hashing-system-on-client-side and http://stackoverflow.com/questions/4121629/password-encryption-at-client-side
 }
 
 function addSpotToShownList(spot){
@@ -87,7 +87,6 @@ $(document).ready(function(){
                     //Try to log in. If login fails, we'll sign up the new user.
                     Parse.User.logIn(federatedLoginUser.email, getPassword(federatedLoginUser), {
                         success: function(user) {
-                            console.log(user);
                             afterSigningIn();
                         },
                         error: function (data, error) {                
@@ -121,6 +120,7 @@ $(document).ready(function(){
     }
     
     function afterSigningIn(){
+        currentUser = Parse.User.current();
         $('#mainContent').show();
         $('#signOut').show();
         $('#federatedSignupLogin').hide();
