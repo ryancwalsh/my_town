@@ -6,7 +6,8 @@
         <title>MyTown</title>
         <link href="//twitter.github.com/bootstrap/assets/css/bootstrap.css" media="all" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet/less" type="text/css" href="styles/main.less" />
-        <link rel="stylesheet/less" type="text/css" href="styles/jquery.tagsinput.less" />
+        <link rel="stylesheet/less" type="text/css" href="styles/jquery.tagsinput.less" />        
+        <link href="//zocial.smcllns.com/css/zocial.css" media="all" rel="stylesheet" type="text/css"/>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
         <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.js"></script>
         <script src="js/underscore-1.1.6.js"></script>
@@ -22,7 +23,7 @@
     </head>
 
     <body>
-        <input id="federatedSignupLogin" type="button" value="Sign Up or Log In with your Google account" class="btn"/>
+        <a id="federatedSignupLogin" href="#" class="zocial google">Sign in with Google</a>
         <input id="signOut" type="button" value="Sign Out" class="btn"/>
         <img id="userPhoto" src="" alt="user photo" class="img-circle"/>
         <div id="mainContent">
@@ -49,28 +50,6 @@
                 <input name="save" type="submit" value="Save" class="btn"/>
             </form>
         </div>
-        <script type="text/javascript">
-
-            var mySpots;
-            $(document).ready(function(){
-                var center = new google.maps.LatLng(32.79503, -117.24142);//San Diego
-                var autocomplete = generateAutocomplete(center);
-                var zoom = 13;//0 = out to earth level, 18 is very close in
-                var mapTypeId = google.maps.MapTypeId.ROADMAP;//ROADMAP, SATELLITE, HYBRID, TERRAIN
-                var map = initializeMap(center, zoom, mapTypeId);
-                addAutocompleteListener(autocomplete, map);
-                mySpots = getSpotsForUser(currentUser, map);
-                $('input[name="tags"]').tagsInput({
-                    width: 400,
-                    height: 40
-                });
-                $('div.tagsinput input').typeahead({//http://twitter.github.com/bootstrap/javascript.html#typeahead
-                    source: tagsInputAutocompleteArray
-                });
-                
-            });//end doc ready
-
-        </script>
     </body>
 </html>
 <!--

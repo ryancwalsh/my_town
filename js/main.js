@@ -93,6 +93,7 @@ $(document).ready(function(){
                             console.log("Error: " + error.code + " " + error.message);
                             console.log(data);
                             if(101 == error.code){
+                                //Logging in failed with these credentials, so we'll create a new user.
                                 var user = new Parse.User();
                                 user.set("username", federatedLoginUser.email);
                                 user.set("password", getPassword(federatedLoginUser));
@@ -130,6 +131,20 @@ $(document).ready(function(){
             });
             tagsInputAutocompleteArray.sort();
         }, logErr);
+        var center = new google.maps.LatLng(32.79503, -117.24142);//San Diego
+        var autocomplete = generateAutocomplete(center);
+        var zoom = 13;//0 = out to earth level, 18 is very close in
+        var mapTypeId = google.maps.MapTypeId.ROADMAP;//ROADMAP, SATELLITE, HYBRID, TERRAIN
+        var map = initializeMap(center, zoom, mapTypeId);
+        addAutocompleteListener(autocomplete, map);
+        mySpots = getSpotsForUser(currentUser, map);
+        $('input[name="tags"]').tagsInput({
+            width: 400,
+            height: 40
+        });
+        $('div.tagsinput input').typeahead({//http://twitter.github.com/bootstrap/javascript.html#typeahead
+            source: tagsInputAutocompleteArray
+        });
     }
 
     $('#signOut').click(function(){
