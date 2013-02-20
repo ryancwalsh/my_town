@@ -2,25 +2,34 @@ Parse.$ = jQuery;
 
 // Initialize Parse with your Parse application javascript keys
 Parse.initialize("yaH11lzPCB3w9ExzINJfcRq34YK1u7yRuUgOPko3", "uNYybtZweTwox5bW1ETykpkNdZhvHaaQCn0BFpTU");
-
+var client_id = '307764999314.apps.googleusercontent.com';
+var scope = 'https://www.googleapis.com/auth/userinfo.email';//Could also ask for https://www.googleapis.com/auth/userinfo.profile with a space between it and the email scope URL.
+GO2.init(client_id, scope);
 function logErr(data, error) {                
     console.log("Error: " + error.code + " " + error.message);
     console.log(data);
 }
+function getPassword(federatedLoginUser){
+    return federatedLoginUser.id;//TODO: make it a hash of something
+}
 var tagsInputAutocompleteArray = [];
 //-----------------------------------------------------------------------------------
-//TODO: replace this temporary section
-var tempUserObj;
-Parse.User.logIn('rcwalsh', 'parse', {}).then(function(user) {
-    tempUserObj = user;
-    console.log(tempUserObj);
-    getTagsForUser(user).then(function(tags){
+var currentUser = Parse.User.current();
+console.log(currentUser);
+var federatedLoginUser;
+if (currentUser) {
+    console.log('in');
+    $('#mainContent').show();
+    $('#signOut').show();
+    $('#federatedSignupLogin').hide();
+    getTagsForUser(currentUser).then(function(tags){
         $.each(tags, function(k, v){
             tagsInputAutocompleteArray.push(v.get('value'));
         });
         tagsInputAutocompleteArray.sort();
     }, logErr);
-}, logErr);
+} 
+
 //-----------------------------------------------------------------------------------
 
 

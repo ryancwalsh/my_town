@@ -92,15 +92,12 @@ Ryan Walsh made edits below. Search for "Walsh".
             }
             if (!access_token) {
                 callbackWaitForToken = callback;
-                window.open(
-                    'https://accounts.google.com/o/oauth2/auth'
-                    + '?response_type=token'
-                    + '&redirect_uri=' + encodeURIComponent(redirect_uri)
-                    + '&scope=' + encodeURIComponent(scope)
-                    + '&client_id=' + encodeURIComponent(client_id),
-                    windowName,
-                    'width=400,height=360'
-                    );
+                var url = 'https://accounts.google.com/o/oauth2/auth'
+                + '?response_type=token'
+                + '&redirect_uri=' + encodeURIComponent(redirect_uri)
+                + '&scope=' + encodeURIComponent(scope)
+                + '&client_id=' + encodeURIComponent(client_id);
+                window.open(url, windowName, 'width=400,height=360');
             } else {
                 return callback(access_token);
             }

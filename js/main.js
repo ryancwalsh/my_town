@@ -66,6 +66,47 @@ function getTag(tagValue, tags){
 }
 
 $(document).ready(function(){
+    
+    $('#federatedSignupLogin').click(function(){
+        //Prompt visitor to provide federated login credentials:
+        console.log('Prompt visitor');
+        GO2.getToken(function(acToken){                        
+            console.log(acToken);
+            $.ajax({
+                url: 'https://www.googleapis.com/oauth2/v1/userinfo?access_token=' + acToken,
+                data: null,
+                success: function(federatedLoginUser) {
+                    federatedLoginUser.photo = 'https://plus.google.com/s2/photos/profile/' + federatedLoginUser.id + '?sz=100';
+                    console.log(federatedLoginUser);
+                    //Try to log in. If login fails, we'll sign up the new user.
+                    Parse.User.logIn(federatedLoginUser.email, getPassword(federatedLoginUser), {
+                        success: function(user) {
+                            console.log(user);
+                        },
+                        error: function (data, error) {                
+                            console.log("Error: " + error.code + " " + error.message);
+                            console.log(data);
+                            if(101 == error.code){
+                                var user = new Parse.User();
+                                user.set("username", federatedLoginUser.email);
+                                user.set("password", getPassword(federatedLoginUser));
+                                user.set("email", federatedLoginUser.email);
+                                user.set("photo", federatedLoginUser.photo);
+                                user.signUp(null, {
+                                    success: function(user) {
+                                        window.location.reload(false);
+                                    },
+                                    error: logErr
+                                });
+                            }
+                        }
+                    });
+                },
+                dataType: "jsonp"
+            });
+        }); 
+    });
+
     $('.mySpots .spot').live('click', function(){
         var id = $(this).attr('data-id');
         var form = $('#editSpotForm');
@@ -89,7 +130,7 @@ $(document).ready(function(){
             spot.set(v, bool);
         });
         var tagValues = form.find('input[name="tags"]').val().split(',');
-        updateTagRelationsToSpot(spot, tagValues, tempUserObj);
+        updateTagRelationsToSpot(spot, tagValues, currentUser);
     });
     
     $('#addSpot').click(function(){
