@@ -121,8 +121,8 @@ $(document).ready(function(){
     
     function afterSigningIn(){
         currentUser = Parse.User.current();
-        $('#mainContent').show();
-        $('#signOut').show();
+        $('#mainContent, #signOut, #userPhoto').show();
+        $('#userPhoto').attr('src', currentUser.get('photo'));
         $('#federatedSignupLogin').hide();
         getTagsForUser(currentUser).then(function(tags){
             $.each(tags, function(k, v){
