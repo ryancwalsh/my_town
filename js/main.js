@@ -99,6 +99,10 @@ $(document).ready(function(){
                                 user.set("password", getPassword(federatedLoginUser));
                                 user.set("email", federatedLoginUser.email);
                                 user.set("photo", federatedLoginUser.photo);
+                                user.set('geoPoint', new Parse.GeoPoint({
+                                    latitude: 32.79503, 
+                                    longitude: -117.24142//San Diego.  TODO: guess based on user IP.
+                                }));
                                 user.signUp(null, {
                                     success: function(user) {
                                         window.location.reload(false);
@@ -131,7 +135,8 @@ $(document).ready(function(){
             });
             tagsInputAutocompleteArray.sort();
         }, logErr);
-        var center = new google.maps.LatLng(32.79503, -117.24142);//San Diego
+        var geoPoint = currentUser.get('geoPoint');
+        var center = new google.maps.LatLng(geoPoint.latitude, geoPoint.longitude);
         var autocomplete = generateAutocomplete(center);
         var zoom = 13;//0 = out to earth level, 18 is very close in
         var mapTypeId = google.maps.MapTypeId.ROADMAP;//ROADMAP, SATELLITE, HYBRID, TERRAIN
