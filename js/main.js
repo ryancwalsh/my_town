@@ -188,5 +188,17 @@ $(document).ready(function(){
         $(this).hide();
         $('#searchTextField').show().focus();
     });
+    
+    $('#searchMySpots').typeahead({//http://twitter.github.com/bootstrap/javascript.html#typeahead
+        //http://www.webmaster-source.com/2012/11/07/getting-more-from-twitter-bootstraps-typeahead-library/
+        source: tagsInputAutocompleteArray,//TODO: should be either an array or a function that generates an array of Spot/Tag names and notes etc
+        updater: function (item) {
+            console.log(item);//TODO: should filter the list of Spots down to the matches.
+            return item;
+        },
+        sorter: function (items) {
+            return items;
+        }
+    });
         
 });//end doc ready
