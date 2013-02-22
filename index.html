@@ -25,7 +25,7 @@
 
     <body>
         <header>
-            <img id="userPhoto" src="" alt="user photo" class="img-circle"/>
+            <img id="userPhoto" src="" alt="user photo" class="img-circle" onerror="imgError(this);"/>
             <input id="signOut" type="button" value="Sign Out" class="btn"/>
         </header>
         <a id="federatedSignupLogin" href="#" class="zocial google">Sign in with Google</a>
@@ -69,6 +69,10 @@
 </html>
 <!--
 TODO:
+populate #tags with Tags
+if has no Tags, hide tagsContainer
+if has no Spots, add instructions
+sort Spots
 enough layout for filtering by search and tag
 filtering by search and tag
 clicking icon on map should show details of that Spot

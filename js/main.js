@@ -71,6 +71,10 @@ function getTag(tagValue, tags){
     return matchingTag;
 }
 
+function imgError(image){
+    image.style.display = 'none';
+}
+
 $(document).ready(function(){
     
     $('#federatedSignupLogin').click(function(e){        
@@ -82,7 +86,7 @@ $(document).ready(function(){
                 url: 'https://www.googleapis.com/oauth2/v1/userinfo?access_token=' + acToken,
                 data: null,
                 success: function(federatedLoginUser) {
-                    federatedLoginUser.photo = 'https://plus.google.com/s2/photos/profile/' + federatedLoginUser.id + '?sz=100';
+                    federatedLoginUser.photo = 'https://www.google.com/s2/photos/profile/' + federatedLoginUser.id + '?sz=100';
                     console.log(federatedLoginUser);
                     //Try to log in. If login fails, we'll sign up the new user.
                     Parse.User.logIn(federatedLoginUser.email, getPassword(federatedLoginUser), {

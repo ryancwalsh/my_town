@@ -1,6 +1,7 @@
 @colorBlue: #0088cc;
 @colorLightGray: #ccc;
 @colorVeryLightGray: #eee;
+@mapHeight: 400px;
 
 #searchTextField{
     display: none;
@@ -11,6 +12,7 @@
 }
 .mySpots{
     margin: 10px;
+    overflow-y: auto;
 }
 .spot{
     margin: 5px;
@@ -21,12 +23,14 @@
 }
 .left, #map_canvas{
     width: 48%;
-    height: 300px;
     display: inline-block;
     vertical-align: top;
 }
 #map_canvas{
-    
+    height: @mapHeight;
+}
+.mySpots{
+    max-height: @mapHeight;
 }
 
 #editSpotForm{
@@ -34,7 +38,6 @@
     input[type="text"], textarea{
         width: 400px;
     }
-
 }
 
 #mainContent{
