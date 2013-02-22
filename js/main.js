@@ -98,15 +98,7 @@ $(document).ready(function(){
                             console.log(data);
                             if(101 == error.code){
                                 //Logging in failed with these credentials, so we'll create a new user.
-                                var user = new Parse.User();
-                                user.set("username", federatedLoginUser.email);
-                                user.set("password", getPassword(federatedLoginUser));
-                                user.set("email", federatedLoginUser.email);
-                                user.set("photo", federatedLoginUser.photo);
-                                user.set('geoPoint', new Parse.GeoPoint({
-                                    latitude: 32.79503, 
-                                    longitude: -117.24142//San Diego.  TODO: guess based on user IP.
-                                }));
+                                var user = getNewUserTemplate(federatedLoginUser, 'Ryan', 32.79503, -117.24142, 'San Diego');
                                 user.signUp(null, {
                                     success: function(user) {
                                         window.location.reload(false);
@@ -134,6 +126,8 @@ $(document).ready(function(){
         $('#mainContent, #signOut, #userPhoto').show();
         $('#userPhoto').attr('src', currentUser.get('photo'));
         $('#federatedSignupLogin').hide();
+        $('.fillInTheBlank.location').html(currentUser.get('locationName'));
+        $('.fillInTheBlank.userFirstName').html(currentUser.get('firstName'));
         getTagsForUser(currentUser).then(function(tags){
             $.each(tags, function(k, v){
                 tagsInputAutocompleteArray.push(v.get('value'));

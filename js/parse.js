@@ -101,18 +101,34 @@ function updateTagRelationsToSpot(spot, tagValuesFromInputBox, user){
         }, logErr);        
     }, logErr);
     
-    function createNewTag(user, tagValue, relation, savedTagPromise){
-        var tag = new Tag();
-        tag.set('user', user);
-        tag.set('ACL', new Parse.ACL(user));
-        tag.set('value', tagValue);
-        console.log('Saving new Tag "' + tagValue + '"...');
-        tag.save().then(function(){
-            relation.add(tag);//Add the relation of the Tag to this Spot.
-            savedTagPromise.resolve(true);
-            tagsInputAutocompleteArray.push(tagValue);
-            tagsInputAutocompleteArray.sort();
-        }, logErr);
-    }
+}
+
+function createNewTag(user, tagValue, relation, savedTagPromise){
+    var tag = new Tag();
+    tag.set('user', user);
+    tag.set('ACL', new Parse.ACL(user));
+    tag.set('value', tagValue);
+    console.log('Saving new Tag "' + tagValue + '"...');
+    tag.save().then(function(){
+        relation.add(tag);//Add the relation of the Tag to this Spot.
+        savedTagPromise.resolve(true);
+        tagsInputAutocompleteArray.push(tagValue);
+        tagsInputAutocompleteArray.sort();
+    }, logErr);
+}
     
+function getNewUserTemplate(federatedLoginUser, firstName, lat, lng, locationName){
+    var user = new Parse.User();
+    user.set("username", federatedLoginUser.email);
+    user.set("password", getPassword(federatedLoginUser));
+    user.set("email", federatedLoginUser.email);
+    user.set("photo", federatedLoginUser.photo);
+    user.set('geoPoint', new Parse.GeoPoint({
+        latitude: lat, 
+        longitude: lng
+    }));
+    user.set('firstName', firstName);
+    user.set('locationName', locationName);
+    user.set('ACL', new Parse.ACL());
+    return user;
 }
