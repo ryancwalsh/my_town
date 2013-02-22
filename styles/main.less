@@ -1,10 +1,13 @@
 @colorBlue: #0088cc;
+@colorLightGray: #ccc;
+@colorVeryLightGray: #eee;
 
 #searchTextField{
-    margin: 10px;
-    width: 400px;
-    float: right;
     display: none;
+    width: 400px;
+}
+#searchMySpots{
+    width: 98%;
 }
 .mySpots{
     margin: 10px;
@@ -16,18 +19,14 @@
         color: @colorBlue;
     }
 }
-
-#map_canvas{
-    width: 800px;
-    height: 500px;
-    margin: 10px;
-    float: right;
-    clear: both;
+.left, #map_canvas{
+    width: 48%;
+    height: 300px;
+    display: inline-block;
+    vertical-align: top;
 }
-
-#addSpot{
-    float: right;
-    clear: both;
+#map_canvas{
+    
 }
 
 #editSpotForm{
@@ -40,16 +39,28 @@
 
 #mainContent{
     display: none;
+    padding: 20px;
 }
 
-#signOut{
-    display: none;
-    float: right;
+
+.fillInTheBlank{
+    border-bottom: 1px solid black;
+    font-family: 'Kaushan Script', cursive;
 }
-#userPhoto{
-    display: none;
-    float: right;
-    clear: both;
-    border: 0;    
-    width: 70px;
+h1{
+    text-align: center;
+    margin-bottom: 20px;
+}
+header{
+    /*background-color: @colorVeryLightGray;
+    border-bottom: 1px solid @colorLightGray;*/
+    text-align: right;
+    #signOut{
+        display: none;
+    }
+    #userPhoto{
+        display: none;
+        border: 0;    
+        height: 30px;
+    }
 }
