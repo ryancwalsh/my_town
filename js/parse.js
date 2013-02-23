@@ -48,6 +48,7 @@ function saveGoogResultToSpot(user, result, map){
     spot.set('user', user);
     spot.set('ACL', new Parse.ACL(user));
     spot.set('name', result.name);
+    spot.set('notes', result.notes);
     spot.set('website', result.website);
     spot.set('rating', result.rating);
     spot.set('address_components', result.address_components);
@@ -88,16 +89,18 @@ function updateTagRelationsToSpot(spot, tagValuesFromInputBox, user){
     }, logErr).then(function(tagsAlreadyInDb) {
         console.log(tagsAlreadyInDb);
         var tagsFinishedSaving = [];        
-        $.each(tagValuesFromInputBox, function(k, v){//Loop through each of the Tag values provided in the input box.                
-            var tag = getTag(v, tagsAlreadyInDb);
-            if(tag) {//If Tag already exists in db, just add relation to Spot.                
-                console.log('Tag already existed, so adding relation.');
-                relation.add(tag);//Add the relation of the Tag to this Spot.
-            } else {
-                var savedTagPromise = new Parse.Promise();
-                createNewTag(user, v, relation, savedTagPromise);//If this Tag does not yet exist for this user, create it. (We'll soon add a relation to the Spot.)
-                tagsFinishedSaving.push(savedTagPromise);
-            }                
+        $.each(tagValuesFromInputBox, function(k, v){//Loop through each of the Tag values provided in the input box.
+            if(v){
+                var tag = getTag(v, tagsAlreadyInDb);
+                if(tag) {//If Tag already exists in db, just add relation to Spot.                
+                    console.log('Tag already existed, so adding relation.');
+                    relation.add(tag);//Add the relation of the Tag to this Spot.
+                } else {
+                    var savedTagPromise = new Parse.Promise();
+                    createNewTag(user, v, relation, savedTagPromise);//If this Tag does not yet exist for this user, create it. (We'll soon add a relation to the Spot.)
+                    tagsFinishedSaving.push(savedTagPromise);
+                }
+            }
         });
         return tagsFinishedSaving;
     }, logErr).then(function(tagsFinishedSaving){

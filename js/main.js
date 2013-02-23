@@ -44,10 +44,11 @@ function convertSpotToForm(spot, form){
         form.find('input[name="tags"]').importTags(commaList);
     }, logErr);
     form.find('input[name="id"]').val(spot['id']);
-    var textFields = ['name', 'notes', 'website', 'yelp', 'menu', 'icon'];
+    var textFields = ['name', 'website', 'yelp', 'menu', 'icon'];
     $.each(textFields, function(k, v){
         form.find('input[name="' + v + '"]').val(spot.get(v));
     });
+    form.find('textarea[name="notes"]').val(spot.get('notes'));
     
     var checkboxes = ['been_there', 'would_go_again'];
     $.each(checkboxes, function(k, v){
@@ -188,7 +189,7 @@ $(document).ready(function(){
         var form = $(this);
         var id = form.find('input[name="id"]').val();
         var spot = mySpots[id];
-        var textFields = ['name', 'notes', 'website', 'yelp', 'menu', 'icon'];
+        var textFields = ['name', 'website', 'yelp', 'menu', 'icon'];
         $.each(textFields, function(k, v){
             spot.set(v, form.find('input[name="' + v + '"]').val());
         });
@@ -198,6 +199,8 @@ $(document).ready(function(){
             var bool = field.is(':checked');
             spot.set(v, bool);
         });
+        spot.set('notes', form.find('textarea[name="notes"]').val());
+        $('.spot[data-id="' + id + '"]').html(form.find('input[name="name"]').val());
         var tagValues = form.find('input[name="tags"]').val().split(',');
         updateTagRelationsToSpot(spot, tagValues, currentUser);
     });
@@ -207,16 +210,5 @@ $(document).ready(function(){
         $('#searchTextField').show().focus();
     });
     
-    $('#searchMySpots').typeahead({//http://twitter.github.com/bootstrap/javascript.html#typeahead
-        //http://www.webmaster-source.com/2012/11/07/getting-more-from-twitter-bootstraps-typeahead-library/
-        source: tagsInputAutocompleteArray,//TODO: should be either an array or a function that generates an array of Spot/Tag names and notes etc
-        updater: function (item) {
-            console.log(item);//TODO: should filter the list of Spots down to the matches.
-            return item;
-        },
-        sorter: function (items) {
-            return items;
-        }
-    });
         
 });//end doc ready
