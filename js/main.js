@@ -192,6 +192,11 @@ $(document).ready(function(){
             console.log(tag);
             $('.mySpots .spot').hide();
             //TODO: show Spots of this Tag
+            getSpotsOfTagForUser(tag).then(function(spots){
+               $.each(spots, function(k, v){
+                   $('.mySpots .spot[data-id="' + v.id + '"]').show();
+               });
+            });
         }
     });
 

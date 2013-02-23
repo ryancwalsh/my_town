@@ -74,6 +74,12 @@ function getTagsForUser(user){
     return query.find();//Find all Tags of this User (not just for this Spot) in the db and put them into tagsAlreadyInDb array.
 }
 
+function getSpotsOfTagForUser(tag){
+    var query = new Parse.Query(Spot);
+    query.equalTo("tags", tag);
+    return query.find();
+}
+
 function updateTagRelationsToSpot(spot, tagValuesFromInputBox, user){
     var relation = spot.relation("tags");
     relation.query().find().then(function(results){
