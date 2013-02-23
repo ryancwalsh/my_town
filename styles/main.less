@@ -1,6 +1,7 @@
 @colorBlue: #0088cc;
 @colorLightGray: #ccc;
 @colorVeryLightGray: #eee;
+@colorWhite: white;
 @mapHeight: 400px;
 
 #searchTextField{
@@ -98,6 +99,13 @@ header{
     .selectedTagFilter{
         font-weight: bold;
     }
+}
+.ui-menu{
+    background: @colorWhite;
+    border: 1px solid @colorLightGray;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 @import-once "jquery.tagsinput.less";

@@ -192,20 +192,23 @@ $(document).ready(function(){
             console.log(tag);
             $('.mySpots .spot').hide();
             //TODO: show Spots of this Tag
-            getSpotsOfTagForUser(tag).then(function(spots){
-               $.each(spots, function(k, v){
-                   $('.mySpots .spot[data-id="' + v.id + '"]').show();
-               });
+            getSpotsOfTag(tag).then(function(spots){
+                $.each(spots, function(k, v){
+                    $('.mySpots .spot[data-id="' + v.id + '"]').show();
+                });
             });
         }
     });
 
     $('.mySpots .spot').live('click', function(){
         var id = $(this).attr('data-id');
-        var form = $('#editSpotForm');
-        convertSpotToForm(mySpots[id], form);
-        $('#editSpotForm').show();
+        showSpotForm(id);
     });
+    
+    function showSpotForm(id){
+        convertSpotToForm(mySpots[id], $('#editSpotForm'));
+        $('#editSpotForm').show();
+    }
     
     $('#editSpotForm').submit(function(event){
         event.preventDefault();
@@ -233,5 +236,32 @@ $(document).ready(function(){
         $('#searchTextField').show().focus();
     });
     
+    $( "#searchMySpots" ).autocomplete({
+        minLength: 0,
+        source: function(request, response){
+            var query = request.term.toLowerCase();
+            var results = [];
+            $.each(mySpots, function(k, v){
+                if(v.get('name').toLowerCase().indexOf(query) != -1){                    
+                    results.push({
+                        'label' : v.get('name'),
+                        'value' : v.id
+                    });
+                }
+            });
+            console.log(results);
+            return response(results);
+        },
+        focus: function( event, ui ) {
+            return false;
+        },
+        select: function( event, ui ) {
+            showSpotForm(ui.item.value);
+            return false;
+        },
+        open: function( event, ui ){
+            
+        }
+    });  
         
 });//end doc ready
