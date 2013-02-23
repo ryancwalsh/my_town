@@ -143,6 +143,7 @@ $(document).ready(function(){
         $('.fillInTheBlank.userFirstName').html(currentUser.get('firstName'));
         getTagsForUser(currentUser).then(function(tags){
             if(tags.length){
+                tagsAlreadyInDb = tags;
                 $.each(tags, function(k, v){
                     tagsInputAutocompleteArray.push(v.get('value'));
                 });            
@@ -175,6 +176,23 @@ $(document).ready(function(){
     $('#signOut').click(function(){
         Parse.User.logOut();
         window.location.reload(false);
+    });
+    
+    $('#tagsContainer .tag').live('click', function(){
+        var selectedTagFilter = 'selectedTagFilter';
+        var clickedTag = $(this);
+        var tagValue = clickedTag.text();
+        $('#tagsContainer .tag').not(clickedTag).removeClass(selectedTagFilter);
+        if(clickedTag.hasClass(selectedTagFilter)){            
+            $('.mySpots .spot').show();//unfilter
+            clickedTag.removeClass(selectedTagFilter);
+        } else {
+            clickedTag.addClass(selectedTagFilter);
+            var tag = getTag(tagValue, tagsAlreadyInDb);
+            console.log(tag);
+            $('.mySpots .spot').hide();
+            //TODO: show Spots of this Tag
+        }
     });
 
     $('.mySpots .spot').live('click', function(){

@@ -9,6 +9,7 @@ function logErr(data, error) {
 }
 var mySpots;
 var tagsInputAutocompleteArray = [];
+var tagsAlreadyInDb = [];
 // "Spot" Model
 // ----------  
 var Spot = Parse.Object.extend("Spot", {
