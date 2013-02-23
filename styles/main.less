@@ -11,7 +11,6 @@
     width: 98%;
 }
 .mySpots{
-    margin: 10px;
     overflow-y: auto;
 }
 .spot{
@@ -26,13 +25,13 @@
     display: inline-block;
     vertical-align: top;
 }
-#map_canvas{
+#map_canvas, .mySpots{
     height: @mapHeight;
+    border: 1px solid @colorLightGray;
 }
-.mySpots{
-    max-height: @mapHeight;
+.instructions{
+    padding: 20px;
 }
-
 #editSpotForm{
     display: none;
     input[type="text"], textarea{
@@ -65,5 +64,17 @@ header{
         display: none;
         border: 0;    
         height: 30px;
+    }
+}
+
+#tagsContainer{
+    vertical-align: top;
+    #tags{
+        border: 0;
+        display: inline-block;
+        height: 37px;
+        span{
+            cursor: pointer;
+        }
     }
 }

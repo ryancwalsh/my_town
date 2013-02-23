@@ -72,7 +72,7 @@ function getTag(tagValue, tags){
 }
 
 function imgError(image){
-     image.style.display = 'none';
+    image.style.display = 'none';
 }
 
 $(document).ready(function(){
@@ -129,10 +129,17 @@ $(document).ready(function(){
         $('.fillInTheBlank.location').html(currentUser.get('locationName'));
         $('.fillInTheBlank.userFirstName').html(currentUser.get('firstName'));
         getTagsForUser(currentUser).then(function(tags){
-            $.each(tags, function(k, v){
-                tagsInputAutocompleteArray.push(v.get('value'));
-            });
-            tagsInputAutocompleteArray.sort();
+            if(tags.length){
+                $.each(tags, function(k, v){
+                    tagsInputAutocompleteArray.push(v.get('value'));
+                });            
+                tagsInputAutocompleteArray.sort();
+                $.each(tagsInputAutocompleteArray, function(k, v){
+                    $('#tags').append('<span class="tag"><span>' + v + '</span></span>');
+                });
+            } else {
+                $('#tagsContainer').hide();
+            }
         }, logErr);
         var geoPoint = currentUser.get('geoPoint');
         var center = new google.maps.LatLng(geoPoint.latitude, geoPoint.longitude);

@@ -42,11 +42,11 @@
 
             <input id="searchMySpots" name="searchMySpots" type="text" placeholder="Search my Spots..."/>
             <div id="tagsContainer">
-                Tags:
-                <div id="tags"></div>
+                Filter by Tag:
+                <div id="tags" class="tagsinput"></div>
             </div>
             <div id="columns">
-                <div class="left">
+                <div class="left">                    
                     <div class="mySpots"></div>
                     <input id="addSpot" type="button" value="Add" class="btn"/>
                     <input id="searchTextField" name="search" type="text" placeholder="Search for a restaurant, park, etc..."/>
@@ -77,13 +77,11 @@
 </html>
 <!--
 TODO:
-Let user choose firstName, location, and locationName.
-populate #tags with Tags
-if has no Tags, hide tagsContainer
 if has no Spots, add instructions
 sort Spots
 enough layout for filtering by search and tag
 filtering by search and tag
+Let user choose firstName, location, and locationName.
 clicking icon on map should show details of that Spot
 styles / UX
 allow clicking Bootstrap Typeahead for tags, not just pressing Enter (might need to edit jquery.tagsinput.js)

@@ -28,10 +28,14 @@ function getSpotsForUser(user, map){//TODO: this isn't the way to handle an asyn
     var query = new Parse.Query(Spot);
     query.equalTo("user", user);
     query.find().then(function(results) {
+        if(results.length){
         $.each(results, function(k, v){
             addSpotToShownListAndMap(v, map);
             mySpots[v.id] = v;
         });
+        } else {
+           $('.mySpots').append('<div class="instructions">Add a spot!</div>');
+        }
     },
     logErr);
     return mySpots;
@@ -54,6 +58,7 @@ function saveGoogResultToSpot(user, result, map){
     spot.save().then(function(spot) {
         addSpotToShownListAndMap(spot, map);
         mySpots[spot.id] = spot;
+        $('.mySpots .instructions').remove();
         $('#searchTextField').val('');
     }, logErr);
 }
