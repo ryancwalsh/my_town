@@ -29,12 +29,13 @@ function getSpotsForUser(user, map){//TODO: this isn't the way to handle an asyn
     query.equalTo("user", user);
     query.find().then(function(results) {
         if(results.length){
-        $.each(results, function(k, v){
-            addSpotToShownListAndMap(v, map);
-            mySpots[v.id] = v;
-        });
+            $.each(results, function(k, v){
+                addSpotToShownListAndMap(v, map);
+                mySpots[v.id] = v;
+            });
+            sortSpots($('.mySpots .spot'));
         } else {
-           $('.mySpots').append('<div class="instructions">Add a spot!</div>');
+            $('.mySpots').append('<div class="instructions">Add a spot!</div>');
         }
     },
     logErr);
@@ -58,6 +59,7 @@ function saveGoogResultToSpot(user, result, map){
     spot.save().then(function(spot) {
         addSpotToShownListAndMap(spot, map);
         mySpots[spot.id] = spot;
+        sortSpots($('.mySpots .spot'));
         $('.mySpots .instructions').remove();
         $('#searchTextField').val('');
     }, logErr);

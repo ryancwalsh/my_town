@@ -75,6 +75,18 @@ function imgError(image){
     image.style.display = 'none';
 }
 
+function sortSpots(selector){
+    var sort_by_name = function(a, b) {
+        return a.innerHTML.toLowerCase().localeCompare(b.innerHTML.toLowerCase());
+    }
+
+    var list = selector.get();
+    list.sort(sort_by_name);
+    for (var i = 0; i < list.length; i++) {
+        list[i].parentNode.appendChild(list[i]);
+    }
+}
+
 $(document).ready(function(){
     
     $('#federatedSignupLogin').click(function(e){        
