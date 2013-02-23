@@ -163,7 +163,8 @@ $(document).ready(function(){
         mySpots = getSpotsForUser(currentUser, map);
         $('input[name="tags"]').tagsInput({
             width: 400,
-            height: 40
+            height: 40,
+            defaultText: 'Tags (comma-separated)'
         });
         $('div.tagsinput input').typeahead({//http://twitter.github.com/bootstrap/javascript.html#typeahead
             source: tagsInputAutocompleteArray
