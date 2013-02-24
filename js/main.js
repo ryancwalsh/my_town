@@ -6,7 +6,7 @@ function getPassword(federatedLoginUser){
 }
 
 function addSpotToShownList(spot){
-    var div = '<div class="spot" data-id="' + spot.id + '">' + spot.get('name') + '</div>';
+    var div = '<div class="spot" data-id="' + spot.id + '">' + spot.get('name') + '<div class="edit">Edit</div></div>';
     $('.mySpots').prepend(div);
 }
 
@@ -17,7 +17,7 @@ function addSpotToShownListAndMap(spot, map){
 
 function addSpotToMap(spot, map){
     var geoPoint = spot.get('geoPoint');
-    return addMarker(geoPoint.latitude, geoPoint.longitude, spot.get('name'), spot.get('icon'), map);
+    return addMarker(geoPoint, spot, map);
 }
 
 function inArrayCaseInsensitive(needle, haystackArray){
@@ -202,9 +202,14 @@ $(document).ready(function(){
 
     $('.mySpots .spot').live('click', function(){
         var id = $(this).attr('data-id');
-        showSpotForm(id);
+        //xxxmapPopup(map, marker, title);
     });
     
+    $('.mySpots .spot .edit').live('click', function(){
+        var id = $(this).closest('.spot').attr('data-id');
+        showSpotForm(id);
+    });
+        
     function showSpotForm(id){
         convertSpotToForm(mySpots[id], $('#editSpotForm'));
         $('#editSpotForm').show();
@@ -256,7 +261,7 @@ $(document).ready(function(){
             return false;
         },
         select: function( event, ui ) {
-            showSpotForm(ui.item.value);
+            //xxx
             return false;
         },
         open: function( event, ui ){

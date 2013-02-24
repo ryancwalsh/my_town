@@ -1,4 +1,5 @@
-function generateAutocomplete(center){    
+var mapInfoWindows = [];
+function generateAutocomplete(center){
     var radius = 2000;//meters
     var circle = new google.maps.Circle({
         center: center, 
@@ -48,19 +49,34 @@ function initializeMap(center, zoom, mapTypeId) {
     return map;
 }
 
-function addMarker(lat, lng, title, icon, map){
-    var myLatlng = new google.maps.LatLng(lat, lng);
+function mapPopup(map, marker, title){
+    map.setZoom(15);
+    map.setCenter(marker.getPosition());
+    var infowindow = new google.maps.InfoWindow();
+    infowindow.setContent(title);
+    $.each(mapInfoWindows, function(k, v){
+        v.close(); 
+    });
+    infowindow.open(map, marker);
+    mapInfoWindows.push(infowindow);
+}
+
+function addMarker(geoPoint, spot, map){
+    var myLatLng = new google.maps.LatLng(geoPoint.latitude, geoPoint.longitude);
     var marker = new google.maps.Marker({
-        position: myLatlng,
+        position: myLatLng,
         map: map,
-        title: title,
+        title: spot.get('name'),
         icon: new google.maps.MarkerImage(
-            icon,      
+            spot.get('icon'),      
             new google.maps.Size(71, 71),//size (width, height)
             new google.maps.Point(0,0),//origin      
             new google.maps.Point(0, 32),// anchor (the base of the flagpole at 0,32)
             new google.maps.Size(20, 20)//scaledSize (width, height)
             )
+    });
+    google.maps.event.addListener(marker, 'click', function() {
+        mapPopup(map, marker, spot.get('name'));
     });
     return marker;
 }

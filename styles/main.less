@@ -15,10 +15,21 @@
     overflow-y: auto;
 }
 .spot{
-    margin: 5px;
+    padding: 5px;
     cursor: pointer;
     &:hover{
-        color: @colorBlue;
+        background-color: @colorBlue;
+        color: @colorWhite;
+    }
+    .edit{
+        color: @colorWhite;
+        width: 20px;
+        display: inline-block;
+        float: right;
+        padding-right: 10px;
+        &:hover{
+            text-decoration: underline;
+        }
     }
 }
 .left, #map_canvas{
