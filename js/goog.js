@@ -1,4 +1,6 @@
-var mapInfoWindows = [];
+var hashSpotInfo = [];
+var map;
+var recentInfowindow = false;
 function generateAutocomplete(center){
     var radius = 2000;//meters
     var circle = new google.maps.Circle({
@@ -44,21 +46,22 @@ function initializeMap(center, zoom, mapTypeId) {
         zoom: zoom,
         mapTypeId: mapTypeId
     };
-    var map = new google.maps.Map(document.getElementById("map_canvas"),
+    map = new google.maps.Map(document.getElementById("map_canvas"),
         mapOptions);
     return map;
 }
 
-function mapPopup(map, marker, title){
+function mapPopup(spotId){
+    console.log(spotId);
+    console.log(hashSpotInfo);
+    var marker = hashSpotInfo[spotId]['marker'];
     map.setZoom(15);
     map.setCenter(marker.getPosition());
-    var infowindow = new google.maps.InfoWindow();
-    infowindow.setContent(title);
-    $.each(mapInfoWindows, function(k, v){
-        v.close(); 
-    });
-    infowindow.open(map, marker);
-    mapInfoWindows.push(infowindow);
+    if (recentInfowindow) {
+        recentInfowindow.close();
+    }
+    hashSpotInfo[spotId]['infowindow'].open(map, marker);
+    recentInfowindow = hashSpotInfo[spotId]['infowindow'];
 }
 
 function addMarker(geoPoint, spot, map){
@@ -75,8 +78,14 @@ function addMarker(geoPoint, spot, map){
             new google.maps.Size(20, 20)//scaledSize (width, height)
             )
     });
+    var infowindow = new google.maps.InfoWindow();
+    infowindow.setContent(spot.get('name'));
+    hashSpotInfo[spot.id] = {
+        'infowindow': infowindow,
+        'marker': marker
+    };
     google.maps.event.addListener(marker, 'click', function() {
-        mapPopup(map, marker, spot.get('name'));
+        mapPopup(spot.id);
     });
     return marker;
 }

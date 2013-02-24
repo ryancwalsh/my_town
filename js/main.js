@@ -202,7 +202,7 @@ $(document).ready(function(){
 
     $('.mySpots .spot').live('click', function(){
         var id = $(this).attr('data-id');
-        //xxxmapPopup(map, marker, title);
+        mapPopup(id);
     });
     
     $('.mySpots .spot .edit').live('click', function(){
@@ -261,7 +261,7 @@ $(document).ready(function(){
             return false;
         },
         select: function( event, ui ) {
-            //xxx
+            mapPopup(ui.item.value);
             return false;
         },
         open: function( event, ui ){
