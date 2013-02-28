@@ -60,6 +60,9 @@ function convertSpotToForm(spot, form){
             field.removeAttr(checked);
         }
     });
+    var toHide = form.find('[name="yelp"], [name="menu"], [name="icon"], [name="been_there"], [name="would_go_again"], label');
+    toHide.hide();
+    toHide.next('br').hide();
 }
 
 function getTag(tagValue, tags){
