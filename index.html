@@ -20,7 +20,8 @@
         <script src="js/goog.js"></script>
         <script src="js/main.js"></script>
         <script src="js/jquery.tagsinput.js"></script>
-        <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyDVr7hka_Jl20VLLjkKE4MlldVThYVxASk&libraries=places&sensor=false"></script>     
+        <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyDVr7hka_Jl20VLLjkKE4MlldVThYVxASk&libraries=places&sensor=false" type="text/javascript"></script>
+        <script src="js/infobox.js" type="text/javascript"></script>
         <script src="js/data_migration.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>
     </head>
@@ -61,7 +62,7 @@
                     <input id="addSpot" type="button" value="Add" class="btn"/>
                     <input id="searchTextField" name="search" type="text" placeholder="Search for a restaurant, park, etc..."/>
                 </div>
-                <div id="map_canvas"></div>    
+                <div id="map_canvas"></div>                
             </div>
 
             <form id="editSpotForm">
@@ -89,6 +90,7 @@
 TODO:
 search result select should show details of that Spot
 hover over Spot in list should reveal edit link
+saving first tag should reveal Filter by Tag
 styles / UX for the edit form
 Let user choose firstName, location, and locationName.
 allow clicking Bootstrap Typeahead for tags, not just pressing Enter (might need to edit jquery.tagsinput.js)

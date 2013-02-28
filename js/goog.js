@@ -78,14 +78,37 @@ function addMarker(geoPoint, spot, map){
             new google.maps.Size(20, 20)//scaledSize (width, height)
             )
     });
-    var infowindow = new google.maps.InfoWindow();
-    infowindow.setContent(spot.get('name'));
+    var boxText = document.createElement("div");
+    boxText.style.cssText = "border: 1px solid black; margin-top: 8px; background: white; padding: 5px;";
+    boxText.innerHTML = spot.get('name');
+
+    var myOptions = {
+        content: boxText        ,
+        disableAutoPan: false        ,
+        maxWidth: 0        ,
+        pixelOffset: new google.maps.Size(-140, 0)        ,
+        zIndex: null        ,
+        boxStyle: { 
+            background: "url('tipbox.gif') no-repeat"
+            ,
+            opacity: 0.75
+            ,
+            width: "280px"
+        } ,
+        closeBoxMargin: "10px 2px 2px 2px"        ,
+        closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif"        ,
+        infoBoxClearance: new google.maps.Size(1, 1)        ,
+        isHidden: false        ,
+        pane: "floatPane"        ,
+        enableEventPropagation: false
+    };
+    var ib = new InfoBox(myOptions);
     hashSpotInfo[spot.id] = {
-        'infowindow': infowindow,
+        'infowindow': ib,
         'marker': marker
     };
     google.maps.event.addListener(marker, 'click', function() {
-        mapPopup(spot.id);
+        mapPopup(spot.id);        
     });
     return marker;
 }

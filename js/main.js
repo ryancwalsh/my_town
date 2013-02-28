@@ -139,7 +139,7 @@ $(document).ready(function(){
     
     function afterSigningIn(){
         currentUser = Parse.User.current();
-        $('#mainContent, #signOut, #userPhoto').show();
+        $('#mainContent, #signOut, #userPhoto, header').show();
         $('#userPhoto').attr('src', currentUser.get('photo'));
         $('#federatedSignupLogin').hide();
         $('.fillInTheBlank.location').html(currentUser.get('locationName'));
