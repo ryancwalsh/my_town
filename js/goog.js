@@ -58,7 +58,23 @@ function mapPopup(spotId){
     if (recentInfowindow) {
         recentInfowindow.close();
     }
-    hashSpotInfo[spotId]['infowindow'].open(map, marker);
+    $('.richMarker').popover('destroy').remove();
+    
+    var richMarker = new RichMarker({
+        //http://google-maps-utility-library-v3.googlecode.com/svn/trunk/richmarker/docs/reference.html
+        map: map,
+        position: marker.getPosition(),
+        draggable: false,
+        flat: true,
+        anchor: RichMarkerPosition.MIDDLE,
+        content: '<div class="richMarker">' + '</div>'
+    });
+    google.maps.event.addDomListener(richMarker, 'ready', function() {
+        $('.richMarker').popover({
+            content: mySpots[spotId].get('name'),
+            placement: 'left'
+        }).popover('show');
+    });
     recentInfowindow = hashSpotInfo[spotId]['infowindow'];
 }
 
@@ -76,30 +92,12 @@ function addMarker(geoPoint, spot, map){
             new google.maps.Size(20, 20)//scaledSize (width, height)
             )
     });
-    var ibDiv = document.createElement("div");
-    ibDiv.innerHTML = spot.get('name');
-
-    var myOptions = {
-        content: ibDiv,
-        disableAutoPan: false,
-        maxWidth: 0,
-        pixelOffset: new google.maps.Size(10, -20),
-        zIndex: null,
-        boxClass: 'infoBox',
-        closeBoxMargin: "10px 2px 2px 2px",
-        closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif",
-        infoBoxClearance: new google.maps.Size(1, 1),
-        isHidden: false,
-        pane: "floatPane",
-        enableEventPropagation: false
-    };
-    var ib = new InfoBox(myOptions);
+    
     hashSpotInfo[spot.id] = {
-        'infowindow': ib,
         'marker': marker
     };
     google.maps.event.addListener(marker, 'click', function() {
-        mapPopup(spot.id);        
+        mapPopup(spot.id);     
     });
     return marker;
 }
