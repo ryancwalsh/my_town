@@ -7,7 +7,6 @@ function logErr(data, error) {
     console.log("Error: " + error.code + " " + error.message);
     console.log(data);
 }
-var mySpots;
 var tagsInputAutocompleteArray = [];
 var tagsAlreadyInDb = [];
 // "Spot" Model
@@ -24,30 +23,13 @@ var Tag = Parse.Object.extend("Tag", {
 var currentUser = Parse.User.current();
 //-----------------------------------------------------------------------------------
 
-function getSpotsForUser(user, map){//TODO: this isn't the way to handle an async func call
-    var mySpots = {};
-    var query = new Parse.Query(Spot);
-    query.equalTo("user", user);
-    query.find().then(function(results) {
-        if(results.length){
-            $.each(results, function(k, v){
-                addSpotToShownListAndMap(v, map);
-                mySpots[v.id] = v;
-            });
-            sortSpots($('.mySpots .spot'));
-        } else {
-            $('.mySpots').append('<div class="instructions">Add a spot!</div>');
-        }
-    },
-    logErr);
-    return mySpots;
-}
-
 function saveGoogResultToSpot(user, result, map){    
     console.log(result);
     var spot = new Spot();
     spot.set('user', user);
-    spot.set('ACL', new Parse.ACL(user));
+    var acl = new Parse.ACL(user);
+    acl.setPublicReadAccess(true);
+    spot.set('ACL', acl);
     spot.set('name', result.name);
     spot.set('notes', result.notes);
     spot.set('website', result.website);
@@ -68,7 +50,6 @@ function saveGoogResultToSpot(user, result, map){
 }
 
 function getTagsForUser(user){
-    console.log(user);
     var query = new Parse.Query(Tag);
     query.equalTo("user", user);
     return query.find();//Find all Tags of this User (not just for this Spot) in the db and put them into tagsAlreadyInDb array.
@@ -123,7 +104,9 @@ function updateTagRelationsToSpot(spot, tagValuesFromInputBox, user){
 function createNewTag(user, tagValue, relation, savedTagPromise){
     var tag = new Tag();
     tag.set('user', user);
-    tag.set('ACL', new Parse.ACL(user));
+    var acl = new Parse.ACL(user);
+    acl.setPublicReadAccess(true);
+    tag.set('ACL', acl);
     tag.set('value', tagValue);
     console.log('Saving new Tag "' + tagValue + '"...');
     tag.save().then(function(){

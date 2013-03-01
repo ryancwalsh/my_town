@@ -90,7 +90,7 @@ function sortSpots(selector){
         list[i].parentNode.appendChild(list[i]);
     }
 }
-
+var mySpots = {};
 $(document).ready(function(){
     
     $('#federatedSignupLogin').click(function(e){        
@@ -142,38 +142,66 @@ $(document).ready(function(){
         $('#mainContent, #signOut, #userPhoto, header').show();
         $('#userPhoto').attr('src', currentUser.get('photo'));
         $('#federatedSignupLogin').hide();
-        $('.fillInTheBlank.location').html(currentUser.get('locationName'));
-        $('.fillInTheBlank.userFirstName').html(currentUser.get('firstName'));
-        getTagsForUser(currentUser).then(function(tags){
-            if(tags.length){
-                tagsAlreadyInDb = tags;
-                $.each(tags, function(k, v){
-                    tagsInputAutocompleteArray.push(v.get('value'));
-                });            
-                tagsInputAutocompleteArray.sort();
-                $.each(tagsInputAutocompleteArray, function(k, v){
-                    $('#tags').append('<span class="tag"><span>' + v + '</span></span>');
-                });
-            } else {
-                $('#tagsContainer').hide();
+        var focusUser;
+        var query = new Parse.Query(Parse.User);
+        var focusUserId = window.location.hash.substring(1);
+        if(!focusUserId){
+            focusUserId = currentUser.id;//TODO: if not focusing on a DIFFERENT user, use the current user object without re-fetching it.
+        }
+        console.log(focusUserId);
+        query.get(focusUserId, {
+            success: function(user) {
+                console.log(user);
+                focusUser = user;
+                $('.fillInTheBlank.location').html(focusUser.get('locationName'));
+                $('.fillInTheBlank.userFirstName').html(focusUser.get('firstName'));
+                getTagsForUser(focusUser).then(function(tags){
+                    if(tags.length){
+                        tagsAlreadyInDb = tags;
+                        $.each(tags, function(k, v){
+                            tagsInputAutocompleteArray.push(v.get('value'));
+                        });            
+                        tagsInputAutocompleteArray.sort();
+                        $.each(tagsInputAutocompleteArray, function(k, v){
+                            $('#tags').append('<span class="tag"><span>' + v + '</span></span>');
+                        });
+                    } else {
+                        $('#tagsContainer').hide();
+                    }
+                }, logErr);
+                var geoPoint = focusUser.get('geoPoint');
+                var center = new google.maps.LatLng(geoPoint.latitude, geoPoint.longitude);
+                var autocomplete = generateAutocomplete(center);
+                var zoom = 13;//0 = out to earth level, 18 is very close in
+                var mapTypeId = google.maps.MapTypeId.ROADMAP;//ROADMAP, SATELLITE, HYBRID, TERRAIN
+                var map = initializeMap(center, zoom, mapTypeId);
+                addAutocompleteListener(autocomplete, map);
+                var querySpots = new Parse.Query(Spot);
+                querySpots.equalTo("user", focusUser);
+                querySpots.find().then(function(results) {
+                    console.log(results);
+                    if(results.length){
+                        $.each(results, function(k, v){
+                            addSpotToShownListAndMap(v, map);
+                            mySpots[v.id] = v;
+                        });
+                        sortSpots($('.mySpots .spot'));
+                    } else {
+                        $('.mySpots').append('<div class="instructions">Add a spot!</div>');
+                    }
+                    console.log(mySpots);
+                    $('input[name="tags"]').tagsInput({
+                        width: 400,
+                        height: 40,
+                        defaultText: 'Tags (comma-separated)'
+                    });
+                    $('div.tagsinput input').typeahead({//http://twitter.github.com/bootstrap/javascript.html#typeahead
+                        source: tagsInputAutocompleteArray
+                    });        
+                },
+                logErr);                
             }
         }, logErr);
-        var geoPoint = currentUser.get('geoPoint');
-        var center = new google.maps.LatLng(geoPoint.latitude, geoPoint.longitude);
-        var autocomplete = generateAutocomplete(center);
-        var zoom = 13;//0 = out to earth level, 18 is very close in
-        var mapTypeId = google.maps.MapTypeId.ROADMAP;//ROADMAP, SATELLITE, HYBRID, TERRAIN
-        var map = initializeMap(center, zoom, mapTypeId);
-        addAutocompleteListener(autocomplete, map);
-        mySpots = getSpotsForUser(currentUser, map);
-        $('input[name="tags"]').tagsInput({
-            width: 400,
-            height: 40,
-            defaultText: 'Tags (comma-separated)'
-        });
-        $('div.tagsinput input').typeahead({//http://twitter.github.com/bootstrap/javascript.html#typeahead
-            source: tagsInputAutocompleteArray
-        });
     }
 
     $('#signOut').click(function(){
@@ -234,6 +262,9 @@ $(document).ready(function(){
             spot.set(v, bool);
         });
         spot.set('notes', form.find('textarea[name="notes"]').val());
+        var acl = new Parse.ACL(user);
+        acl.setPublicReadAccess(true);
+        spot.set('ACL', acl);
         $('.spot[data-id="' + id + '"]').html(form.find('input[name="name"]').val());
         var tagValues = form.find('input[name="tags"]').val().split(',');
         updateTagRelationsToSpot(spot, tagValues, currentUser);
