@@ -52,8 +52,6 @@ function initializeMap(center, zoom, mapTypeId) {
 }
 
 function mapPopup(spotId){
-    console.log(spotId);
-    console.log(hashSpotInfo);
     var marker = hashSpotInfo[spotId]['marker'];
     map.setZoom(15);
     map.setCenter(marker.getPosition());
@@ -78,28 +76,21 @@ function addMarker(geoPoint, spot, map){
             new google.maps.Size(20, 20)//scaledSize (width, height)
             )
     });
-    var boxText = document.createElement("div");
-    boxText.style.cssText = "border: 1px solid black; margin-top: 8px; background: white; padding: 5px;";
-    boxText.innerHTML = spot.get('name');
+    var ibDiv = document.createElement("div");
+    ibDiv.innerHTML = spot.get('name');
 
     var myOptions = {
-        content: boxText        ,
-        disableAutoPan: false        ,
-        maxWidth: 0        ,
-        pixelOffset: new google.maps.Size(-140, 0)        ,
-        zIndex: null        ,
-        boxStyle: { 
-            background: "url('tipbox.gif') no-repeat"
-            ,
-            opacity: 0.75
-            ,
-            width: "280px"
-        } ,
-        closeBoxMargin: "10px 2px 2px 2px"        ,
-        closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif"        ,
-        infoBoxClearance: new google.maps.Size(1, 1)        ,
-        isHidden: false        ,
-        pane: "floatPane"        ,
+        content: ibDiv,
+        disableAutoPan: false,
+        maxWidth: 0,
+        pixelOffset: new google.maps.Size(10, -20),
+        zIndex: null,
+        boxClass: 'infoBox',
+        closeBoxMargin: "10px 2px 2px 2px",
+        closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif",
+        infoBoxClearance: new google.maps.Size(1, 1),
+        isHidden: false,
+        pane: "floatPane",
         enableEventPropagation: false
     };
     var ib = new InfoBox(myOptions);
