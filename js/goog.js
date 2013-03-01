@@ -71,8 +71,10 @@ function mapPopup(spotId){
     });
     google.maps.event.addDomListener(richMarker, 'ready', function() {
         $('.richMarker').popover({
-            content: mySpots[spotId].get('name'),
-            placement: 'left'
+            title: mySpots[spotId].get('name'),
+            content: 'Description of ' + mySpots[spotId].get('name'),
+            placement: 'top'
+            //,container: '#mainContent'
         }).popover('show');
     });
     recentInfowindow = hashSpotInfo[spotId]['infowindow'];
@@ -88,7 +90,7 @@ function addMarker(geoPoint, spot, map){
             spot.get('icon'),      
             new google.maps.Size(71, 71),//size (width, height)
             new google.maps.Point(0,0),//origin      
-            new google.maps.Point(0, 32),// anchor (the base of the flagpole at 0,32)
+            new google.maps.Point(10, -5),// anchor (the base of the flagpole)
             new google.maps.Size(20, 20)//scaledSize (width, height)
             )
     });
