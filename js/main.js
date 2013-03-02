@@ -148,10 +148,8 @@ $(document).ready(function(){
         if(!focusUserId){
             focusUserId = currentUser.id;//TODO: if not focusing on a DIFFERENT user, use the current user object without re-fetching it.
         }
-        console.log(focusUserId);
         query.get(focusUserId, {
             success: function(user) {
-                console.log(user);
                 focusUser = user;
                 $('.fillInTheBlank.location').html(focusUser.get('locationName'));
                 $('.fillInTheBlank.userFirstName').html(focusUser.get('firstName'));
@@ -179,7 +177,6 @@ $(document).ready(function(){
                 var querySpots = new Parse.Query(Spot);
                 querySpots.equalTo("user", focusUser);
                 querySpots.find().then(function(results) {
-                    console.log(results);
                     if(results.length){
                         $.each(results, function(k, v){
                             addSpotToShownListAndMap(v, map);
@@ -189,7 +186,6 @@ $(document).ready(function(){
                     } else {
                         $('.mySpots').append('<div class="instructions">Add a spot!</div>');
                     }
-                    console.log(mySpots);
                     $('input[name="tags"]').tagsInput({
                         width: 400,
                         height: 40,
@@ -248,7 +244,7 @@ $(document).ready(function(){
         
     function showSpotForm(id){
         convertSpotToForm(mySpots[id], $('#editSpotForm'));
-        $('#editSpotForm').show();
+        $('#editSpotFormDiv').modal();
     }
     
     $('#editSpotForm').submit(function(event){
@@ -267,12 +263,13 @@ $(document).ready(function(){
             spot.set(v, bool);
         });
         spot.set('notes', form.find('textarea[name="notes"]').val());
-        var acl = new Parse.ACL(user);
+        var acl = new Parse.ACL(currentUser);
         acl.setPublicReadAccess(true);
         spot.set('ACL', acl);
         $('.spot[data-id="' + id + '"]').html(form.find('input[name="name"]').val());
         var tagValues = form.find('input[name="tags"]').val().split(',');
         updateTagRelationsToSpot(spot, tagValues, currentUser);
+        $('#editSpotFormDiv').modal('hide');
     });
     
     $('#addSpot').click(function(){
