@@ -1,4 +1,5 @@
 @colorBlue: #0088cc;
+@colorLinkHover: #005580;
 @colorLightGray: #ccc;
 @colorVeryLightGray: #eee;
 @colorWhite: white;
@@ -38,10 +39,15 @@ body{
         }
     }
 }
-.left, #map_canvas{
-    width: 48%;
-    display: inline-block;
-    vertical-align: top;
+#map_canvas{
+    width: 500px;
+    
+}
+.columns {
+    margin: auto;
+    td{
+        vertical-align: top;
+    }
 }
 #map_canvas, .mySpots{
     height: @mapHeight;
@@ -121,6 +127,7 @@ header{
         box-shadow: none;
         display: inline-block;
         height: @lh;
+        width: auto;
         span{
             cursor: pointer;
         }
@@ -139,6 +146,21 @@ header{
 
 .popover-content{
     min-width: 200px;
+}
+
+.editPopup{
+    display: inline-block;
+    float: right;
+    color: @colorBlue;
+    text-decoration: none;
+    cursor: pointer;
+    &:hover, &:focus {
+        color: @colorLinkHover;
+        text-decoration: underline;
+    }
+    &:hover, &:active {
+        outline: 0;
+    }
 }
 
 @import-once "jquery.tagsinput.less";

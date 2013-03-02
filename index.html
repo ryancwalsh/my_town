@@ -48,22 +48,29 @@
         <a id="federatedSignupLogin" href="#" class="zocial google">Sign in with Google</a>
         <div id="mainContent">
 
-
-            <input id="searchMySpots" name="searchMySpots" type="text" placeholder="Search my Spots..."/>
-            <div id="tagsContainer">
-                <label>
-                    Filter by Tag:
-                </label>
-                <div id="tags" class="tagsinput"></div>
-            </div>
-            <div id="columns">
-                <div class="left">                    
-                    <div class="mySpots"></div>
-                    <input id="addSpot" type="button" value="Add" class="btn"/>
-                    <input id="searchTextField" name="search" type="text" placeholder="Search for a restaurant, park, etc..."/>
-                </div>
-                <div id="map_canvas"></div>
-            </div>
+            <table class="columns">
+                <tr>
+                    <td colspan="2">
+                        <!--            <input id="searchMySpots" name="searchMySpots" type="text" placeholder="Search my Spots..."/>-->
+                        <div id="tagsContainer">
+                            <label>
+                                Filter by Tag:
+                            </label>
+                            <div id="tags" class="tagsinput"></div>
+                        </div>            
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="mySpots"></div>
+                        <input id="addSpot" type="button" value="Add" class="btn"/>
+                        <input id="searchTextField" name="search" type="text" placeholder="Search for a restaurant, park, etc..."/>
+                    </td>
+                    <td>
+                        <div id="map_canvas"></div>
+                    </td>
+                </tr>
+            </table>
 
             <form id="editSpotForm">
                 <input name="name" placeholder="Name" type="text" value=""/><br/>
@@ -88,8 +95,7 @@
 </html>
 <!--
 TODO:
-search result select should show details of that Spot
-hover over Spot in list should reveal edit link
+let logged-out user view someone's info
 saving first tag should reveal Filter by Tag
 styles / UX for the edit form
 Let user choose firstName, location, and locationName.
@@ -97,19 +103,16 @@ allow clicking Bootstrap Typeahead for tags, not just pressing Enter (might need
 tutorials / flow
 pagination
 searching
-user set latLng and zoom, location name, user first name
 map moving changes results
 clicking map should enable me to add a Spot there
 Yelp link
-name
+site name
 minify/obscure js
 figure out optimal js loading
 archive Spot
 archive entire Tag
 how to make money
-make goog login secure
-study ACLs and ensure I'm using them correctly
-facebook login?
+use OpenId (and/or facebook login?)
 rename entire Tag
 unarchive stuff
 allow account deletion

@@ -240,6 +240,11 @@ $(document).ready(function(){
         var id = $(this).closest('.spot').attr('data-id');
         showSpotForm(id);
     });
+    
+    $('.editPopup').live('click', function(){
+        var id = $(this).attr('data-id');
+        showSpotForm(id);
+    });
         
     function showSpotForm(id){
         convertSpotToForm(mySpots[id], $('#editSpotForm'));

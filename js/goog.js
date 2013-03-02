@@ -70,11 +70,13 @@ function mapPopup(spotId){
         content: '<div class="richMarker">' + '</div>'
     });
     google.maps.event.addDomListener(richMarker, 'ready', function() {
+        var notes = mySpots[spotId].get('notes') ? mySpots[spotId].get('notes') : '(Add notes here)';
         $('.richMarker').popover({
             title: mySpots[spotId].get('name'),
-            content: 'Description of ' + mySpots[spotId].get('name'),
+            content: notes + ' <div class="editPopup" data-id="' + spotId + '">Edit</div>',
+            html: true,
             placement: 'top'
-            //,container: '#mainContent'
+        //,container: '#mainContent'
         }).popover('show');
     });
     recentInfowindow = hashSpotInfo[spotId]['infowindow'];
