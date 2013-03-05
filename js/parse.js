@@ -2,7 +2,7 @@ Parse.$ = jQuery;
 
 // Initialize Parse with your Parse application javascript keys
 Parse.initialize("yaH11lzPCB3w9ExzINJfcRq34YK1u7yRuUgOPko3", "uNYybtZweTwox5bW1ETykpkNdZhvHaaQCn0BFpTU");
-
+    
 function logErr(data, error) {                
     console.log("Error: " + error.code + " " + error.message);
     console.log(data);
@@ -20,7 +20,6 @@ var Spot = Parse.Object.extend("Spot", {
 var Tag = Parse.Object.extend("Tag", {
     
     });
-var currentUser = Parse.User.current();
 //-----------------------------------------------------------------------------------
 
 function saveGoogResultToSpot(user, result, map){    
@@ -132,3 +131,46 @@ function getNewUserTemplate(federatedLoginUser, firstName, lat, lng, locationNam
     user.set('ACL', new Parse.ACL());
     return user;
 }
+
+// The main view for the app
+var AppView = Parse.View.extend({
+    initialize: function() {
+        this.render();
+    },
+
+    render: function() {
+        console.log('render AppView');
+        if (Parse.User.current()) {
+            new LoggedInView();
+        } else {
+            new LoggedOutView();
+        }
+    }
+});
+    
+var LoggedInView = Parse.View.extend({      
+    initialize: function() {
+        this.render();
+        afterSigningIn();
+    },
+
+    render: function() {
+        console.log('render LoggedInView');
+        $('#app .content').html(_.template($("#logged-in-template").html()));
+    }
+});
+    
+var LoggedOutView = Parse.View.extend({      
+    initialize: function() {
+        this.render();
+    },
+
+    render: function() {
+        console.log('render LoggedOutView');
+        $('#app .content').html(_.template($("#logged-out-template").html()));
+    }
+});
+
+$(function() {
+    var App = new AppView;
+});

@@ -1,6 +1,7 @@
 var hashSpotInfo = [];
 var map;
 var recentInfowindow = false;
+//------------------------------------------------------------------------------
 function generateAutocomplete(center){
     var radius = 2000;//meters
     var circle = new google.maps.Circle({
@@ -18,7 +19,7 @@ function generateAutocomplete(center){
     var autocomplete = new google.maps.places.Autocomplete(input, options);
     return autocomplete;
 }
-
+//------------------------------------------------------------------------------
 function addAutocompleteListener(autocomplete, map){
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
         var place = autocomplete.getPlace();
@@ -39,7 +40,7 @@ function addAutocompleteListener(autocomplete, map){
         saveGoogResultToSpot(currentUser, result, map);
     });
 }
-
+//------------------------------------------------------------------------------
 function initializeMap(center, zoom, mapTypeId) {
     var mapOptions = {
         center: center,
@@ -50,7 +51,7 @@ function initializeMap(center, zoom, mapTypeId) {
         mapOptions);
     return map;
 }
-
+//------------------------------------------------------------------------------
 function mapPopup(spotId){
     var marker = hashSpotInfo[spotId]['marker'];
     map.setZoom(15);
@@ -81,7 +82,7 @@ function mapPopup(spotId){
     });
     recentInfowindow = hashSpotInfo[spotId]['infowindow'];
 }
-
+//------------------------------------------------------------------------------
 function addMarker(geoPoint, spot, map){
     var myLatLng = new google.maps.LatLng(geoPoint.latitude, geoPoint.longitude);
     var marker = new google.maps.Marker({
@@ -105,3 +106,4 @@ function addMarker(geoPoint, spot, map){
     });
     return marker;
 }
+//------------------------------------------------------------------------------
