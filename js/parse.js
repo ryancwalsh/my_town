@@ -2,8 +2,8 @@ Parse.$ = jQuery;
 
 // Initialize Parse with your Parse application javascript keys
 Parse.initialize("yaH11lzPCB3w9ExzINJfcRq34YK1u7yRuUgOPko3", "uNYybtZweTwox5bW1ETykpkNdZhvHaaQCn0BFpTU");
-    
-function logErr(data, error) {                
+
+function logErr(data, error) {
     console.log("Error: " + error.code + " " + error.message);
     console.log(data);
 }
@@ -12,17 +12,15 @@ var tagsAlreadyInDb = [];
 // "Spot" Model
 // ----------  
 var Spot = Parse.Object.extend("Spot", {
-
-    });
+});
 
 // "Tag" Model
 // ----------  
 var Tag = Parse.Object.extend("Tag", {
-    
-    });
+});
 //-----------------------------------------------------------------------------------
 
-function saveGoogResultToSpot(user, result, map){    
+function saveGoogResultToSpot(user, result, map) {
     console.log(result);
     var spot = new Spot();
     spot.set('user', user);
@@ -36,7 +34,7 @@ function saveGoogResultToSpot(user, result, map){
     spot.set('address_components', result.address_components);
     spot.set('icon', result.icon);
     spot.set('geoPoint', new Parse.GeoPoint({
-        latitude: result.lat, 
+        latitude: result.lat,
         longitude: result.lng
     }));
     spot.save().then(function(spot) {
@@ -48,38 +46,38 @@ function saveGoogResultToSpot(user, result, map){
     }, logErr);
 }
 
-function getTagsForUser(user){
+function getTagsForUser(user) {
     var query = new Parse.Query(Tag);
     query.equalTo("user", user);
     return query.find();//Find all Tags of this User (not just for this Spot) in the db and put them into tagsAlreadyInDb array.
 }
 
-function getSpotsOfTag(tag){
+function getSpotsOfTag(tag) {
     var query = new Parse.Query(Spot);
     query.equalTo("tags", tag);
     return query.find();
 }
 
-function updateTagRelationsToSpot(spot, tagValuesFromInputBox, user){
+function updateTagRelationsToSpot(spot, tagValuesFromInputBox, user) {
     var relation = spot.relation("tags");
-    relation.query().find().then(function(results){
-        $.each(results, function(k, v){//Loop through all Tags related to this Spot in the db.
+    relation.query().find().then(function(results) {
+        $.each(results, function(k, v) {//Loop through all Tags related to this Spot in the db.
             console.log(v.get('value'));
-            if (inArrayCaseInsensitive(v.get('value'), tagValuesFromInputBox) === -1){
+            if (inArrayCaseInsensitive(v.get('value'), tagValuesFromInputBox) === -1) {
                 console.log('remove');
                 relation.remove(v);//Remove Tag from Spot if no longer in input field.
-            //TODO: if this Tag is no longer related to any Spots, delete the Tag completely.
+                //TODO: if this Tag is no longer related to any Spots, delete the Tag completely.
             }
         });
-    }, logErr).then(function(){
+    }, logErr).then(function() {
         return getTagsForUser(user);
     }, logErr).then(function(tagsAlreadyInDb) {
         console.log(tagsAlreadyInDb);
-        var tagsFinishedSaving = [];        
-        $.each(tagValuesFromInputBox, function(k, v){//Loop through each of the Tag values provided in the input box.
-            if(v){
+        var tagsFinishedSaving = [];
+        $.each(tagValuesFromInputBox, function(k, v) {//Loop through each of the Tag values provided in the input box.
+            if (v) {
                 var tag = getTag(v, tagsAlreadyInDb);
-                if(tag) {//If Tag already exists in db, just add relation to Spot.                
+                if (tag) {//If Tag already exists in db, just add relation to Spot.                
                     console.log('Tag already existed, so adding relation.');
                     relation.add(tag);//Add the relation of the Tag to this Spot.
                 } else {
@@ -90,17 +88,17 @@ function updateTagRelationsToSpot(spot, tagValuesFromInputBox, user){
             }
         });
         return tagsFinishedSaving;
-    }, logErr).then(function(tagsFinishedSaving){
-        Parse.Promise.when(tagsFinishedSaving).then(function(){
-            spot.save().then(function(data) {                    
+    }, logErr).then(function(tagsFinishedSaving) {
+        Parse.Promise.when(tagsFinishedSaving).then(function() {
+            spot.save().then(function(data) {
                 console.log('Saved Spot.');
             }, logErr);
-        }, logErr);        
+        }, logErr);
     }, logErr);
-    
+
 }
 
-function createNewTag(user, tagValue, relation, savedTagPromise){
+function createNewTag(user, tagValue, relation, savedTagPromise) {
     var tag = new Tag();
     tag.set('user', user);
     var acl = new Parse.ACL(user);
@@ -108,22 +106,22 @@ function createNewTag(user, tagValue, relation, savedTagPromise){
     tag.set('ACL', acl);
     tag.set('value', tagValue);
     console.log('Saving new Tag "' + tagValue + '"...');
-    tag.save().then(function(){
+    tag.save().then(function() {
         relation.add(tag);//Add the relation of the Tag to this Spot.
         savedTagPromise.resolve(true);
         tagsInputAutocompleteArray.push(tagValue);
         tagsInputAutocompleteArray.sort();
     }, logErr);
 }
-    
-function getNewUserTemplate(federatedLoginUser, firstName, lat, lng, locationName){
+
+function getNewUserTemplate(federatedLoginUser, firstName, lat, lng, locationName) {
     var user = new Parse.User();
     user.set("username", federatedLoginUser.email);
     user.set("password", getPassword(federatedLoginUser));
     user.set("email", federatedLoginUser.email);
     user.set("photo", federatedLoginUser.photo);
     user.set('geoPoint', new Parse.GeoPoint({
-        latitude: lat, 
+        latitude: lat,
         longitude: lng
     }));
     user.set('firstName', firstName);
@@ -137,37 +135,43 @@ var AppView = Parse.View.extend({
     initialize: function() {
         this.render();
     },
-
     render: function() {
         console.log('render AppView');
-        if (Parse.User.current()) {
-            new LoggedInView();
+        var focusUserId = window.location.hash.substring(1);
+        var currentUser = Parse.User.current();
+        if (currentUser) {
+            console.log(currentUser.get('photo'));
+            $('#userPhoto').attr('src', currentUser.get('photo'));
+            new MainView({'model': {'focusUserId': focusUserId}});
         } else {
-            new LoggedOutView();
+            if (focusUserId) {
+                new MainView({'model': {'focusUserId': focusUserId}});
+            } else {
+                new IntroView();
+            }
         }
     }
 });
-    
-var LoggedInView = Parse.View.extend({      
+
+var MainView = Parse.View.extend({
     initialize: function() {
         this.render();
-        afterSigningIn();
+        console.log(this.model.focusUserId);
+        afterSigningIn(this.model.focusUserId);
     },
-
     render: function() {
         console.log('render LoggedInView');
-        $('#app .content').html(_.template($("#logged-in-template").html()));
+        $('#app .content').html(_.template($("#main-template").html()));
     }
 });
-    
-var LoggedOutView = Parse.View.extend({      
+
+var IntroView = Parse.View.extend({
     initialize: function() {
         this.render();
     },
-
     render: function() {
         console.log('render LoggedOutView');
-        $('#app .content').html(_.template($("#logged-out-template").html()));
+        $('#app .content').html(_.template($("#intro-template").html()));
     }
 });
 
