@@ -112,6 +112,7 @@ function createNewTag(user, tagValue, relation, savedTagPromise) {
         tagsInputAutocompleteArray.push(tagValue);
         tagsInputAutocompleteArray.sort();
     }, logErr);
+    $('#tagsContainer').show();
 }
 
 function getNewUserTemplate(federatedLoginUser, firstName, lat, lng, locationName) {
@@ -140,8 +141,6 @@ var AppView = Parse.View.extend({
         var focusUserId = window.location.hash.substring(1);
         var currentUser = Parse.User.current();
         if (currentUser) {
-            console.log(currentUser.get('photo'));
-            $('#userPhoto').attr('src', currentUser.get('photo'));
             new MainView({'model': {'focusUserId': focusUserId}});
         } else {
             if (focusUserId) {
@@ -162,6 +161,12 @@ var MainView = Parse.View.extend({
     render: function() {
         console.log('render LoggedInView');
         $('#app .content').html(_.template($("#main-template").html()));
+        var currentUser = Parse.User.current();
+        if (currentUser) {
+            $('#userPhoto').attr('src', currentUser.get('photo'));
+        } else {
+            $('#userPhoto').hide();
+        }
     }
 });
 

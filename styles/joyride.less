@@ -1,0 +1,52 @@
+body{
+    /*This is a fix for http://stackoverflow.com/questions/12962120/jquery-ui-transfer-effect-misses-target*/
+    position: static;
+}
+
+.joyride-tip-guide {    
+    padding-bottom: 10px;
+    @if $outdatedBrowser {
+        margin-top: -10px;/*This margin-top is related to body{position:static} and http://stackoverflow.com/questions/12962120/jquery-ui-transfer-effect-misses-target*/
+    }
+    .joyride-next-tip {
+        vertical-align: middle;
+        float: right;
+        @include orangeGradient;
+        border: 0;
+        @include shadowed;
+        
+        &:hover {
+            border: 0 !important;
+            text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.8);
+            -webkit-text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.8);
+            -moz-text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.8);
+        }
+    }
+    .joyride-content-wrapper{        
+        .tourStepOfTotal{
+            float: right;
+            vertical-align: middle;
+            padding-right: 15px;
+            padding-top: 6px;
+        }
+    }    
+    h3 { 
+        margin-right: 4px;
+    }
+    span.joyride-nub.topRight{
+        border-color: #000;
+        border-color: rgba(0,0,0,0.8);
+        border-top-color: transparent !important;
+        border-left-color: transparent !important;
+        border-right-color: transparent !important;
+        top: -28px;
+        bottom: none;    
+        left: auto;
+        right: 28px;
+    }
+}
+@if $outdatedBrowser {
+    .joyride-modal-bg{
+        visibility: hidden;
+    }    
+}
