@@ -3,8 +3,16 @@
 @colorLightGray: #ccc;
 @colorVeryLightGray: #eee;
 @colorWhite: white;
+@colorBlack: black;
+@colorTranslucentBlack: rgba(0,0,0,.5);
 @mapHeight: 400px;
 @imagesPath: '../images/';
+
+.border-radius (@radius: 5px) {
+  border-radius: @radius;
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+}
 
 body{
     background: @colorVeryLightGray url("@{imagesPath}bg.jpg");
@@ -164,6 +172,30 @@ header{
     }
 }
 
+#landingPage{
+    background: @colorBlack url("@{imagesPath}bg2.jpg");
+    background-repeat: no-repeat;
+    min-height: 500px;
+    text-align: center;
+    .translucent{           
+        background: @colorTranslucentBlack;
+        margin: auto;
+        margin-top: 100px;
+        /*position: relative;
+        left: 50px;
+        top: 100px;*/
+        display: inline-block;
+        padding: 20px;
+        .border-radius;
+        h1{
+            color: @colorWhite;
+            text-shadow: 0px 1px 2px rgba(0, 0, 0, 1.0);
+            letter-spacing: -0.05em;
+            font-size: 35px;
+            margin-bottom: 20px;
+        }
+    }    
+}
 @import-once "jquery.tagsinput.less";
 /*@import-once "joyride.less";*/
 @import-once "zocial.less";
