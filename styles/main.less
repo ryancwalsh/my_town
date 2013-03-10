@@ -41,7 +41,7 @@ body{
         width: 20px;
         display: inline-block;
         float: right;
-        padding-right: 10px;
+        padding: 0 10px;
         &:hover{
             text-decoration: underline;
         }
@@ -66,9 +66,13 @@ body{
 }
 #editSpotFormDiv{
     display: none;
-    padding: 20px;
+    width: auto;
+    .formContents{
+        padding: 20px;
+    }
     form{
         margin-bottom: 0;
+        display: inline-block;
     }
     input[type="text"], textarea{
         width: 400px;
@@ -175,7 +179,8 @@ header{
 #landingPage{
     background: @colorBlack url("@{imagesPath}bg2.jpg");
     background-repeat: no-repeat;
-    min-height: 500px;
+    background-position: center;
+    min-height: 900px;
     text-align: center;
     .translucent{           
         background: @colorTranslucentBlack;

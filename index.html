@@ -82,21 +82,29 @@
 
                 <div id="editSpotFormDiv" role="dialog" class="modal hide fade">
                     <form id="editSpotForm">
-                        <input name="name" placeholder="Name" type="text" value=""/><br/>
-                        <input name="tags" placeholder="Tags (food, outdoor, touristy, etc)" type="text" value=""/><br/>
-                        <textarea name="notes" placeholder="Notes"></textarea><br/>
-                        <input name="website" placeholder="Website URL" type="text" value=""/><br/>
-                        <input name="yelp" placeholder="Yelp URL" type="text" value=""/><br/>
-                        <input name="menu" placeholder="Menu URL" type="text" value=""/><br/>
-                        <input name="icon" placeholder="Icon URL" type="text" value=""/><br/>
-                        <label for="been_there" class="checkbox">
-                            <input id="been_there" name="been_there" type="checkbox" /> Been there?
-                        </label><br/>
-                        <label for="would_go_again" class="checkbox">
-                            <input id="would_go_again" name="would_go_again" type="checkbox" /> Would go again?
-                        </label>
-                        <input name="id" type="hidden" value=""/>
-                        <input name="save" type="submit" value="Save" class="btn"/>
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h3>Edit Spot</h3>
+                        </div>
+                        <div class="formContents">
+                            <input name="name" placeholder="Name" type="text" value=""/><br/>
+                            <input name="tags" placeholder="Tags (food, outdoor, touristy, etc)" type="text" value=""/><br/>
+                            <textarea name="notes" placeholder="Notes"></textarea><br/>
+                            <input name="website" placeholder="Website URL" type="text" value=""/><br/>
+                            <input name="yelp" placeholder="Yelp URL" type="text" value=""/><br/>
+                            <input name="menu" placeholder="Menu URL" type="text" value=""/><br/>
+                            <input name="icon" placeholder="Icon URL" type="text" value=""/><br/>
+                            <label for="been_there" class="checkbox">
+                                <input id="been_there" name="been_there" type="checkbox" /> Been there?
+                            </label><br/>
+                            <label for="would_go_again" class="checkbox">
+                                <input id="would_go_again" name="would_go_again" type="checkbox" /> Would go again?
+                            </label>
+                        </div>
+                        <div class="modal-footer">
+                            <input name="id" type="hidden" value=""/>
+                            <input name="save" type="submit" value="Save" class="btn"/>
+                        </div>
                     </form>
 
                 </div>
@@ -122,34 +130,50 @@
             </div>
         </script>
 
-    </body>
+    </body>    
 </html>
+<script type="text/javascript">
 
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39175408-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
 
 <!--
+-----------------------------------------
 TODO:
-analytics
-logged-out page
+logged-out page (http://www.shopify.com/, https://munchery.com/)
 dismissable Joyride Tour
 tutorials / flow
 Let user choose firstName, location, and locationName.
-pagination of Spots
+-----------------------------------------
+-----------------------------------------
+-----------------------------------------
+-----------------------------------------
+-----------------------------------------
 searching
-map moving changes results (optionally)
 try to guess Yelp link and ratings?
 map popup should hide on map move or click
+archive Spot
+map moving changes results (optionally)
+pagination of Spots
+site name
 -----------------------------------------
 use OpenId (and/or facebook login?)
-site name
 minify/obscure js
-figure out optimal js loading
+figure out optimal js loading (Require JS?)
 figure out anonymous js func wrappers
-archive Spot
 archive entire Tag
 how to make money
 rename entire Tag
 unarchive stuff
 allow account deletion
 clicking map should enable me to add a Spot there
-figure out js min/obfuscation
 -->
