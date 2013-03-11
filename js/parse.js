@@ -129,29 +129,16 @@ function getNewUserTemplate(federatedLoginUser) {
     return user;
 }
 
-var MainView = Parse.View.extend({//TODO: rethink this view.
+var MainView = Parse.View.extend({
     initialize: function() {
-        this.render();
-        console.log(this.model.focusUserId);
-        generateMapAndListsForUserId(this.model.focusUserId);
-    },
-    render: function() {
         console.log('render LoggedInView');
-        $('#app .content').html(_.template($("#main-template").html()));
-        var currentUser = Parse.User.current();
-        if (currentUser) {
-            $('#userPhoto').attr('src', currentUser.get('photo'));
-        } else {
-            $('#userPhoto').hide();
-        }
+        $('#app .content').html(_.template($("#main-template").html()));        
+        generateMapAndLists();
     }
 });
 
 var IntroView = Parse.View.extend({
     initialize: function() {
-        this.render();
-    },
-    render: function() {
         console.log('render LoggedOutView');
         $('#app .content').html(_.template($("#intro-template").html()));
     }
@@ -159,37 +146,20 @@ var IntroView = Parse.View.extend({
 
 var GetStartedView = Parse.View.extend({
     initialize: function() {
-        this.render();
-    },
-    render: function() {
         console.log('render GetStartedView');
         $('#app .content').html(_.template($("#get-started-template").html()));
     }
 });
 
 $(function() {
-    //TODO: rewrite this flow.
-    var focusUserId = window.location.hash.substring(1);
     var currentUser = Parse.User.current();
     if (currentUser) {
         if(isFirstTime(currentUser)){
             new GetStartedView();
         } else {
-            new MainView({
-                'model': {
-                    'focusUserId': focusUserId
-                }
-            });
+            new MainView();
         }
     } else {
-        if (focusUserId) {
-            new MainView({
-                'model': {
-                    'focusUserId': focusUserId
-                }
-            });
-    } else {
         new IntroView();
-    }
-    }
+    }    
 });

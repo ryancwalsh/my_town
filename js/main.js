@@ -93,7 +93,10 @@ function sortSpots(selector) {
 }
 var mySpots = {};
 
-function do1(){//TODO: rethink this function.
+function generateMapAndLists() {
+    var currentUser = Parse.User.current();
+    var focusUser = currentUser;
+    $('#userPhoto').attr('src', currentUser.get('photo'));
     $('.fillInTheBlank.location').html(focusUser.get('locationName'));
     $('.fillInTheBlank.userFirstName').html(focusUser.get('firstName'));
     getTagsForUser(focusUser).then(function(tags) {
@@ -138,28 +141,7 @@ function do1(){//TODO: rethink this function.
             source: tagsInputAutocompleteArray
         });
     }, logErr);
-}
-
-function afterSigningInSuccess(user) {//TODO: rethink this function.
-    focusUser = user;
-    console.log(focusUser);
-    if(isFirstTime(currentUser)){
-                
-    } else {
-                
-    }    
-}
-
-function generateMapAndListsForUserId(focusUserId) {//TODO: rethink this function.
-    console.log(focusUserId);
-    if (focusUserId) {
-        var query = new Parse.Query(Parse.User);
-        query.get(focusUserId, {
-            success: afterSigningInSuccess
-        }, logErr);
-    } else {
-        afterSigningInSuccess(Parse.User.current());
-    }
+    
 }
 
 var federatedLoginUser;
@@ -169,8 +151,8 @@ function federatedLogin(federatedLoginUser) {
     console.log(federatedLoginUser);
     //Try to log in. If login fails, we'll sign up the new user.
     Parse.User.logIn(federatedLoginUser.email, getPassword(federatedLoginUser), {
-        success: function(user) {//TODO: rethink this function.
-            generateMapAndListsForUserId();
+        success: function(user) {
+            window.location.reload(false);
         },
         error: function(data, error) {
             console.log("Error: " + error.code + " " + error.message);
