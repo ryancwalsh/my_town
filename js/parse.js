@@ -12,12 +12,12 @@ var tagsAlreadyInDb = [];
 // "Spot" Model
 // ----------  
 var Spot = Parse.Object.extend("Spot", {
-});
+    });
 
 // "Tag" Model
 // ----------  
 var Tag = Parse.Object.extend("Tag", {
-});
+    });
 //-----------------------------------------------------------------------------------
 
 function saveGoogResultToSpot(user, result, map) {
@@ -66,7 +66,7 @@ function updateTagRelationsToSpot(spot, tagValuesFromInputBox, user) {
             if (inArrayCaseInsensitive(v.get('value'), tagValuesFromInputBox) === -1) {
                 console.log('remove');
                 relation.remove(v);//Remove Tag from Spot if no longer in input field.
-                //TODO: if this Tag is no longer related to any Spots, delete the Tag completely.
+            //TODO: if this Tag is no longer related to any Spots, delete the Tag completely.
             }
         });
     }, logErr).then(function() {
@@ -115,48 +115,25 @@ function createNewTag(user, tagValue, relation, savedTagPromise) {
     $('#tagsContainer').show();
 }
 
-function getNewUserTemplate(federatedLoginUser, firstName, lat, lng, locationName) {
+function isFirstTime(user){
+    return (user.get('firstName') == '' || user.get('locationName') == '' || user.get('geoPoint') == '');
+}
+
+function getNewUserTemplate(federatedLoginUser) {
     var user = new Parse.User();
     user.set("username", federatedLoginUser.email);
     user.set("password", getPassword(federatedLoginUser));
     user.set("email", federatedLoginUser.email);
-    user.set("photo", federatedLoginUser.photo);
-    user.set('geoPoint', new Parse.GeoPoint({
-        latitude: lat,
-        longitude: lng
-    }));
-    user.set('firstName', firstName);
-    user.set('locationName', locationName);
+    user.set("photo", federatedLoginUser.photo);    
     user.set('ACL', new Parse.ACL());
     return user;
 }
 
-// The main view for the app
-var AppView = Parse.View.extend({
-    initialize: function() {
-        this.render();
-    },
-    render: function() {
-        console.log('render AppView');
-        var focusUserId = window.location.hash.substring(1);
-        var currentUser = Parse.User.current();
-        if (currentUser) {
-            new MainView({'model': {'focusUserId': focusUserId}});
-        } else {
-            if (focusUserId) {
-                new MainView({'model': {'focusUserId': focusUserId}});
-            } else {
-                new IntroView();
-            }
-        }
-    }
-});
-
-var MainView = Parse.View.extend({
+var MainView = Parse.View.extend({//TODO: rethink this view.
     initialize: function() {
         this.render();
         console.log(this.model.focusUserId);
-        afterSigningIn(this.model.focusUserId);
+        generateMapAndListsForUserId(this.model.focusUserId);
     },
     render: function() {
         console.log('render LoggedInView');
@@ -180,6 +157,39 @@ var IntroView = Parse.View.extend({
     }
 });
 
+var GetStartedView = Parse.View.extend({
+    initialize: function() {
+        this.render();
+    },
+    render: function() {
+        console.log('render GetStartedView');
+        $('#app .content').html(_.template($("#get-started-template").html()));
+    }
+});
+
 $(function() {
-    var App = new AppView;
+    //TODO: rewrite this flow.
+    var focusUserId = window.location.hash.substring(1);
+    var currentUser = Parse.User.current();
+    if (currentUser) {
+        if(isFirstTime(currentUser)){
+            new GetStartedView();
+        } else {
+            new MainView({
+                'model': {
+                    'focusUserId': focusUserId
+                }
+            });
+        }
+    } else {
+        if (focusUserId) {
+            new MainView({
+                'model': {
+                    'focusUserId': focusUserId
+                }
+            });
+    } else {
+        new IntroView();
+    }
+    }
 });

@@ -77,7 +77,7 @@ function getTag(tagValue, tags) {
 
 function imgError(image) {
     console.log('imgError');
-    //image.style.display = 'none';
+//image.style.display = 'none';
 }
 
 function sortSpots(selector) {
@@ -93,8 +93,7 @@ function sortSpots(selector) {
 }
 var mySpots = {};
 
-function afterSigningInSuccess(user) {
-    focusUser = user;
+function do1(){//TODO: rethink this function.
     $('.fillInTheBlank.location').html(focusUser.get('locationName'));
     $('.fillInTheBlank.userFirstName').html(focusUser.get('firstName'));
     getTagsForUser(focusUser).then(function(tags) {
@@ -141,7 +140,17 @@ function afterSigningInSuccess(user) {
     }, logErr);
 }
 
-function afterSigningIn(focusUserId) {
+function afterSigningInSuccess(user) {//TODO: rethink this function.
+    focusUser = user;
+    console.log(focusUser);
+    if(isFirstTime(currentUser)){
+                
+    } else {
+                
+    }    
+}
+
+function generateMapAndListsForUserId(focusUserId) {//TODO: rethink this function.
     console.log(focusUserId);
     if (focusUserId) {
         var query = new Parse.Query(Parse.User);
@@ -160,15 +169,15 @@ function federatedLogin(federatedLoginUser) {
     console.log(federatedLoginUser);
     //Try to log in. If login fails, we'll sign up the new user.
     Parse.User.logIn(federatedLoginUser.email, getPassword(federatedLoginUser), {
-        success: function(user) {
-            afterSigningIn(user);
+        success: function(user) {//TODO: rethink this function.
+            generateMapAndListsForUserId();
         },
         error: function(data, error) {
             console.log("Error: " + error.code + " " + error.message);
             console.log(data);
             if (101 == error.code) {
                 //Logging in failed with these credentials, so we'll create a new user.
-                var user = getNewUserTemplate(federatedLoginUser, 'Ryan', 32.79503, -117.24142, 'San Diego');
+                var user = getNewUserTemplate(federatedLoginUser);
                 user.signUp(null, {
                     success: function(user) {
                         window.location.reload(false);

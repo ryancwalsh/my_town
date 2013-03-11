@@ -97,7 +97,7 @@ Ryan Walsh made edits below. Search for "Walsh".
                 + '&redirect_uri=' + encodeURIComponent(redirect_uri)
                 + '&scope=' + encodeURIComponent(scope)
                 + '&client_id=' + encodeURIComponent(client_id);
-                window.open(url, windowName, 'width=400,height=360');
+                window.open(url, windowName, 'width=500,height=400');
             } else {
                 return callback(access_token);
             }
