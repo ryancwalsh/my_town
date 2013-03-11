@@ -20,7 +20,7 @@ function generateAutocomplete(center){
     return autocomplete;
 }
 //------------------------------------------------------------------------------
-function addAutocompleteListener(autocomplete, map){
+function addAutocompleteListener(autocomplete, callback){
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
         var place = autocomplete.getPlace();
         if (!place.geometry) {
@@ -37,7 +37,7 @@ function addAutocompleteListener(autocomplete, map){
             lat : place.geometry.location.lat(),
             lng : place.geometry.location.lng()
         };
-        saveGoogResultToSpot(currentUser, result, map);
+        callback(result);
     });
 }
 //------------------------------------------------------------------------------

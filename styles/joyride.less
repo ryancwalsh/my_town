@@ -5,15 +5,10 @@ body{
 
 .joyride-tip-guide {    
     padding-bottom: 10px;
-    @if $outdatedBrowser {
-        margin-top: -10px;/*This margin-top is related to body{position:static} and http://stackoverflow.com/questions/12962120/jquery-ui-transfer-effect-misses-target*/
-    }
     .joyride-next-tip {
         vertical-align: middle;
         float: right;
-        @include orangeGradient;
         border: 0;
-        @include shadowed;
         
         &:hover {
             border: 0 !important;
@@ -44,9 +39,4 @@ body{
         left: auto;
         right: 28px;
     }
-}
-@if $outdatedBrowser {
-    .joyride-modal-bg{
-        visibility: hidden;
-    }    
 }

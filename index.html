@@ -131,28 +131,32 @@
         </script>
 
         <script type="text/template" id="get-started-template"> 
-            <div id="get-started">
-                <h1>
-                    Welcome! 
-                </h1>
-                <div>
-                    To get started, we just need to know:     
+            <div id="get-started">                
+                <div class="nameAndMapCenterStep">
+                    <h1>
+                        Welcome! 
+                    </h1>
+                    <div>
+                        To get started, we just need to know:     
+                    </div>
+                    <div>
+                        What is your first name? <input name="firstName" type="text" placeholder="First Name"/>
+                        This will appear in the title of your map.    
+                    </div>
+                    <div>
+                        Where should the center of your map be?  <input id="homeLocationSearch" name="location" type="text" placeholder="City, State"/>
+                        You can use your home address or just your town.
+                    </div>
+                    <input type="button" value="Continue" class="btn"/>
                 </div>
-                <div>
-                    What is your first name? <input name="firstName" type="text" placeholder="First Name"/>
-                    This will appear in the title of your map.    
-                </div>
-                <div>
-                    Where should the center of your map be?  <input name="location" type="text" placeholder="City, State"/>
-                    You can use your home address or just your town.
-                </div>
-                <input type="button" value="Continue" class="btn"/>
+                <div class="locationNameStep">
+                    <div>
+                        Great! We'll use this as the label for your location: <input name="locationName" type="text" value="XXX"/>  
+    <!--                    You can always change these settings by clicking Settings.-->
 
-                <div>
-                    Great! We'll use this as the label for your location: <input name="locationName" type="text" value="XXX"/>  You can always change these settings by clicking Settings.
-
+                    </div>
+                    <input type="button" value="Create My Map" class="btn"/>
                 </div>
-                <input type="button" value="Create My Map" class="btn"/>
             </div>
         </script>
 

@@ -119,7 +119,9 @@ function generateMapAndLists() {
     var zoom = 13;//0 = out to earth level, 18 is very close in
     var mapTypeId = google.maps.MapTypeId.ROADMAP;//ROADMAP, SATELLITE, HYBRID, TERRAIN
     var map = initializeMap(center, zoom, mapTypeId);
-    addAutocompleteListener(autocomplete, map);
+    addAutocompleteListener(autocomplete, function(result){
+        saveGoogResultToSpot(currentUser, result, map);
+    });
     var querySpots = new Parse.Query(Spot);
     querySpots.equalTo("user", focusUser);
     querySpots.find().then(function(results) {
@@ -292,5 +294,20 @@ $(document).ready(function() {
 
         }
     });
+    
+    var mapCenterAutocomplete = new google.maps.places.Autocomplete(document.getElementById('homeLocationSearch'));
+    addAutocompleteListener(mapCenterAutocomplete, function(result){
+        console.log(result);
+    });
+    var nameAndMapCenterStep = $('.nameAndMapCenterStep');
+    nameAndMapCenterStep.find('.btn').click(function(){
+        nameAndMapCenterStep.hide();
+        $('.locationNameStep').slideDown();
+    });
+    
+//    nameAndMapCenterStep.find('input[name="firstName"]').change(function(){
+//       var val = $(this).val();
+//       
+//    });
 
 });//end doc ready
