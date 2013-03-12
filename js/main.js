@@ -295,14 +295,31 @@ $(document).ready(function() {
         }
     });
     
+    var homeLocationSearchResult;
     var mapCenterAutocomplete = new google.maps.places.Autocomplete(document.getElementById('homeLocationSearch'));
     addAutocompleteListener(mapCenterAutocomplete, function(result){
         console.log(result);
+        homeLocationSearchResult = result;
     });
     var nameAndMapCenterStep = $('.nameAndMapCenterStep');
     nameAndMapCenterStep.find('.btn').click(function(){
-        nameAndMapCenterStep.hide();
-        $('.locationNameStep').slideDown();
+        if(homeLocationSearchResult && $('#firstName').val()){
+            var currentUser = Parse.User.current();
+            currentUser.set('firstName', $('#firstName').val());
+            currentUser.set('geoPoint', new Parse.GeoPoint({
+                latitude: homeLocationSearchResult.lat,
+                longitude: homeLocationSearchResult.lng
+            }));
+            var locationName = homeLocationSearchResult.address_components[3].short_name;
+            $('#mapCenterLocationName').val(locationName);
+            currentUser.set('locationName', locationName);
+            currentUser.save().then(function(user) {
+                nameAndMapCenterStep.hide();
+                $('.locationNameStep').slideDown();
+            }, logErr);        
+        } else {
+        //TODO: validation error
+        }
     });
     
 //    nameAndMapCenterStep.find('input[name="firstName"]').change(function(){
