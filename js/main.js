@@ -329,6 +329,7 @@ $(document).ready(function() {
         }
         if (locationName) {
             var currentUser = Parse.User.current();
+            currentUser.set('locationName', locationName);
             currentUser.save().then(createMyMap, logErr);
         } else {
             createMyMap();
