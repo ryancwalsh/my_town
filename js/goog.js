@@ -2,25 +2,25 @@ var hashSpotInfo = [];
 var map;
 var recentInfowindow = false;
 //------------------------------------------------------------------------------
-function generateAutocomplete(center){
+function generateAutocomplete(center) {
     var radius = 2000;//meters
     var circle = new google.maps.Circle({
-        center: center, 
+        center: center,
         radius: radius
     });
-    var defaultBounds= circle.getBounds();
+    var defaultBounds = circle.getBounds();
 
     var input = document.getElementById('searchTextField');
     var options = {
         bounds: defaultBounds
-    //,types: ['establishment']
+                //,types: ['establishment']
     };
 
     var autocomplete = new google.maps.places.Autocomplete(input, options);
     return autocomplete;
 }
 //------------------------------------------------------------------------------
-function addAutocompleteListener(autocomplete, callback){
+function addAutocompleteListener(autocomplete, callback) {
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
         var place = autocomplete.getPlace();
         if (!place.geometry) {
@@ -29,13 +29,13 @@ function addAutocompleteListener(autocomplete, callback){
         }
         console.log(place);
         var result = {
-            name : place.name,
-            website : place.website,            
-            rating : place.rating,
-            address_components : place.address_components,
-            icon : place.icon,
-            lat : place.geometry.location.lat(),
-            lng : place.geometry.location.lng()
+            name: place.name,
+            website: place.website,
+            rating: place.rating,
+            address_components: place.address_components,
+            icon: place.icon,
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng()
         };
         callback(result);
     });
@@ -48,11 +48,11 @@ function initializeMap(center, zoom, mapTypeId) {
         mapTypeId: mapTypeId
     };
     map = new google.maps.Map(document.getElementById("map_canvas"),
-        mapOptions);
+            mapOptions);
     return map;
 }
 //------------------------------------------------------------------------------
-function mapPopup(spotId){
+function mapPopup(spotId) {
     var marker = hashSpotInfo[spotId]['marker'];
     map.setZoom(15);
     map.setCenter(marker.getPosition());
@@ -60,7 +60,7 @@ function mapPopup(spotId){
         recentInfowindow.close();
     }
     $('.richMarker').popover('destroy').remove();
-    
+
     var richMarker = new RichMarker({
         //http://google-maps-utility-library-v3.googlecode.com/svn/trunk/richmarker/docs/reference.html
         map: map,
@@ -77,33 +77,51 @@ function mapPopup(spotId){
             content: notes + ' <div class="editPopup" data-id="' + spotId + '">Edit</div>',
             html: true,
             placement: 'top'
-        //,container: '#mainContent'
+                    //,container: '#mainContent'
         }).popover('show');
     });
     recentInfowindow = hashSpotInfo[spotId]['infowindow'];
 }
 //------------------------------------------------------------------------------
-function addMarker(geoPoint, spot, map){
+function addMarker(geoPoint, spot, map) {
     var myLatLng = new google.maps.LatLng(geoPoint.latitude, geoPoint.longitude);
     var marker = new google.maps.Marker({
         position: myLatLng,
         map: map,
         title: spot.get('name'),
         icon: new google.maps.MarkerImage(
-            spot.get('icon'),      
-            new google.maps.Size(71, 71),//size (width, height)
-            new google.maps.Point(0,0),//origin      
-            new google.maps.Point(10, -5),// anchor (the base of the flagpole)
-            new google.maps.Size(20, 20)//scaledSize (width, height)
-            )
+                spot.get('icon'),
+                new google.maps.Size(71, 71), //size (width, height)
+                new google.maps.Point(0, 0), //origin      
+                new google.maps.Point(10, -5), // anchor (the base of the flagpole)
+                new google.maps.Size(20, 20)//scaledSize (width, height)
+                )
     });
-    
+
     hashSpotInfo[spot.id] = {
         'marker': marker
     };
     google.maps.event.addListener(marker, 'click', function() {
-        mapPopup(spot.id);     
+        mapPopup(spot.id);
     });
     return marker;
+}
+//------------------------------------------------------------------------------
+function getCityFromGeocoder(geocoderResult) {
+    var ac = geocoderResult.address_components;
+    for (j = 0; j < ac.length; ++j)
+    {
+        var types = ac[j].types;
+        for (k = 0; k < types.length; ++k)
+        {
+            //find city
+            if (types[k] === "locality")
+            {
+                //put the city name in the form
+                return ac[j].long_name;
+            }
+        }
+    }
+    return null;
 }
 //------------------------------------------------------------------------------

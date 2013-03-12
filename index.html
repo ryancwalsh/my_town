@@ -141,11 +141,11 @@
                     </div>
                     <div>
                         What is your first name? <input name="firstName" type="text" placeholder="First Name" id="firstName"/>
-                        This will appear in the title of your map.    
+                        (This will appear in the title of your map.)
                     </div>
                     <div>
                         Where should the center of your map be?  <input id="homeLocationSearch" name="location" type="text" placeholder="City, State"/>
-                        You can use your home address or just your town.
+                        (You can use your home address or just your town.)
                     </div>
                     <input type="button" value="Continue" class="btn"/>
                 </div>
@@ -155,12 +155,12 @@
     <!--                    You can always change these settings by clicking Settings.-->
 
                     </div>
-                    <input type="button" value="Create My Map" class="btn"/>
+                    <input type="button" value="Create My Map" class="btn" id="createMyMap"/>
                 </div>
             </div>
         </script>
 
-    </body>    
+    </body>
 </html>
 <script type="text/javascript">
 
@@ -179,6 +179,7 @@
 <!--
 -----------------------------------------
 TODO:
+fix error Cannot read property 'value' of null
 signup /login flow
 dismissable Joyride Tour
 logged-out page (http://www.shopify.com/, https://munchery.com/)

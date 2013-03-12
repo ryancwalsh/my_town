@@ -119,7 +119,7 @@ function generateMapAndLists() {
     var zoom = 13;//0 = out to earth level, 18 is very close in
     var mapTypeId = google.maps.MapTypeId.ROADMAP;//ROADMAP, SATELLITE, HYBRID, TERRAIN
     var map = initializeMap(center, zoom, mapTypeId);
-    addAutocompleteListener(autocomplete, function(result){
+    addAutocompleteListener(autocomplete, function(result) {
         saveGoogResultToSpot(currentUser, result, map);
     });
     var querySpots = new Parse.Query(Spot);
@@ -143,7 +143,7 @@ function generateMapAndLists() {
             source: tagsInputAutocompleteArray
         });
     }, logErr);
-    
+
 }
 
 var federatedLoginUser;
@@ -294,37 +294,45 @@ $(document).ready(function() {
 
         }
     });
-    
+
     var homeLocationSearchResult;
     var mapCenterAutocomplete = new google.maps.places.Autocomplete(document.getElementById('homeLocationSearch'));
-    addAutocompleteListener(mapCenterAutocomplete, function(result){
+    addAutocompleteListener(mapCenterAutocomplete, function(result) {
         console.log(result);
         homeLocationSearchResult = result;
     });
     var nameAndMapCenterStep = $('.nameAndMapCenterStep');
-    nameAndMapCenterStep.find('.btn').click(function(){
-        if(homeLocationSearchResult && $('#firstName').val()){
+    nameAndMapCenterStep.find('.btn').click(function() {
+        if (homeLocationSearchResult && $('#firstName').val()) {
             var currentUser = Parse.User.current();
             currentUser.set('firstName', $('#firstName').val());
             currentUser.set('geoPoint', new Parse.GeoPoint({
                 latitude: homeLocationSearchResult.lat,
                 longitude: homeLocationSearchResult.lng
             }));
-            var locationName = homeLocationSearchResult.address_components[3].short_name;
+            var locationName = getCityFromGeocoder(homeLocationSearchResult);
             $('#mapCenterLocationName').val(locationName);
             currentUser.set('locationName', locationName);
             currentUser.save().then(function(user) {
                 nameAndMapCenterStep.hide();
                 $('.locationNameStep').slideDown();
-            }, logErr);        
+            }, logErr);
         } else {
-        //TODO: validation error
+            //TODO: validation error
         }
     });
-    
-//    nameAndMapCenterStep.find('input[name="firstName"]').change(function(){
-//       var val = $(this).val();
-//       
-//    });
+
+    $('#createMyMap').click(function() {
+        var locationName = $('#mapCenterLocationName').val();
+        function createMyMap() {
+            window.location.reload(false);
+        }
+        if (locationName) {
+            var currentUser = Parse.User.current();
+            currentUser.save().then(createMyMap, logErr);
+        } else {
+            createMyMap();
+        }
+    });
 
 });//end doc ready
