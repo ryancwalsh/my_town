@@ -1,25 +1,27 @@
+'use strict';
 var client_id = '307764999314.apps.googleusercontent.com';
 var scope = 'https://www.googleapis.com/auth/userinfo.email';//Could also ask for https://www.googleapis.com/auth/userinfo.profile with a space between it and the email scope URL.
 GO2.init(client_id, scope);
+//------------------------------------------------------------------------------
 function getPassword(federatedLoginUser) {
     return federatedLoginUser.id;//TODO: see http://stackoverflow.com/questions/3715920/about-password-hashing-system-on-client-side and http://stackoverflow.com/questions/4121629/password-encryption-at-client-side
 }
-
+//------------------------------------------------------------------------------
 function addSpotToShownList(spot) {
     var div = '<div class="spot" data-id="' + spot.id + '">' + spot.get('name') + '<div class="edit">Edit</div></div>';
     $('.mySpots').prepend(div);
 }
-
+//------------------------------------------------------------------------------
 function addSpotToShownListAndMap(spot, map) {
     addSpotToShownList(spot);
     addSpotToMap(spot, map);
 }
-
+//------------------------------------------------------------------------------
 function addSpotToMap(spot, map) {
     var geoPoint = spot.get('geoPoint');
     return addMarker(geoPoint, spot, map);
 }
-
+//------------------------------------------------------------------------------
 function inArrayCaseInsensitive(needle, haystackArray) {
     //Iterates over an array of items to return the index of the first item that matches the provided val ('needle') in a case-insensitive way.  Returns -1 if no match found.
     var defaultResult = -1;
@@ -31,7 +33,7 @@ function inArrayCaseInsensitive(needle, haystackArray) {
     });
     return result;
 }
-
+//------------------------------------------------------------------------------
 function convertSpotToForm(spot, form) {
     spot.relation("tags").query().find().then(function(results) {
         console.log(results);
@@ -50,7 +52,7 @@ function convertSpotToForm(spot, form) {
     });
     form.find('textarea[name="notes"]').val(spot.get('notes'));
 
-    var checkboxes = ['been_there', 'would_go_again'];
+    /*var checkboxes = ['been_there', 'would_go_again'];
     $.each(checkboxes, function(k, v) {
         var field = form.find('input[name="' + v + '"]');
         var checked = 'checked';
@@ -59,12 +61,12 @@ function convertSpotToForm(spot, form) {
         } else {
             field.removeAttr(checked);
         }
-    });
+    });*/
     var toHide = form.find('[name="yelp"], [name="menu"], [name="icon"], [name="been_there"], [name="would_go_again"], label');
     toHide.hide();
     toHide.next('br').hide();
 }
-
+//------------------------------------------------------------------------------
 function getTag(tagValue, tags) {
     var matchingTag = false;
     $.each(tags, function(k, v) {
@@ -74,12 +76,12 @@ function getTag(tagValue, tags) {
     });
     return matchingTag;
 }
-
+//------------------------------------------------------------------------------
 function imgError(image) {
     console.log('imgError');
 //image.style.display = 'none';
 }
-
+//------------------------------------------------------------------------------
 function sortSpots(selector) {
     var sort_by_name = function(a, b) {
         return a.innerHTML.toLowerCase().localeCompare(b.innerHTML.toLowerCase());
@@ -92,7 +94,7 @@ function sortSpots(selector) {
     }
 }
 var mySpots = {};
-
+//------------------------------------------------------------------------------
 function generateMapAndLists() {
     var currentUser = Parse.User.current();
     var focusUser = currentUser;
@@ -100,6 +102,7 @@ function generateMapAndLists() {
     $('.fillInTheBlank.location').html(focusUser.get('locationName'));
     $('.fillInTheBlank.userFirstName').html(focusUser.get('firstName'));
     getTagsForUser(focusUser).then(function(tags) {
+        console.log('getTagsForUserThen');
         if (tags.length) {
             tagsAlreadyInDb = tags;
             $.each(tags, function(k, v) {
@@ -147,7 +150,7 @@ function generateMapAndLists() {
 }
 
 var federatedLoginUser;
-
+//------------------------------------------------------------------------------
 function federatedLogin(federatedLoginUser) {
     federatedLoginUser.photo = 'https://www.google.com/s2/photos/profile/' + federatedLoginUser.id + '?sz=100';
     console.log(federatedLoginUser);
@@ -172,7 +175,8 @@ function federatedLogin(federatedLoginUser) {
         }
     });
 }
-
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 $(document).ready(function() {
 
     $('#federatedSignupLogin').click(function(e) {
@@ -246,12 +250,12 @@ $(document).ready(function() {
         $.each(textFields, function(k, v) {
             spot.set(v, form.find('input[name="' + v + '"]').val());
         });
-        var checkboxes = ['been_there', 'would_go_again'];
+        /*var checkboxes = ['been_there', 'would_go_again'];
         $.each(checkboxes, function(k, v) {
             var field = form.find('input[name="' + v + '"]');
             var bool = field.is(':checked');
             spot.set(v, bool);
-        });
+        });*/
         spot.set('notes', form.find('textarea[name="notes"]').val());
         var acl = new Parse.ACL(currentUser);
         acl.setPublicReadAccess(true);
@@ -266,7 +270,7 @@ $(document).ready(function() {
         $(this).hide();
         $('#searchTextField').show().focus();
     });
-
+    //------------------------------------------------------------------------------
     $("#searchMySpots").autocomplete({
         minLength: 0,
         source: function(request, response) {
@@ -294,7 +298,7 @@ $(document).ready(function() {
 
         }
     });
-
+    //------------------------------------------------------------------------------
     var homeLocationSearchResult;
     var mapCenterAutocomplete = new google.maps.places.Autocomplete(document.getElementById('homeLocationSearch'));
     addAutocompleteListener(mapCenterAutocomplete, function(result) {
@@ -321,7 +325,7 @@ $(document).ready(function() {
             //TODO: validation error
         }
     });
-
+    //------------------------------------------------------------------------------
     $('#createMyMap').click(function() {
         var locationName = $('#mapCenterLocationName').val();
         function createMyMap() {
@@ -337,3 +341,5 @@ $(document).ready(function() {
     });
 
 });//end doc ready
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------

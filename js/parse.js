@@ -1,3 +1,4 @@
+'use strict';
 Parse.$ = jQuery;
 
 // Initialize Parse with your Parse application javascript keys
@@ -49,6 +50,7 @@ function saveGoogResultToSpot(user, result, map) {
 function getTagsForUser(user) {
     var query = new Parse.Query(Tag);
     query.equalTo("user", user);
+    console.log(query);
     return query.find();//Find all Tags of this User (not just for this Spot) in the db and put them into tagsAlreadyInDb array.
 }
 
@@ -57,7 +59,7 @@ function getSpotsOfTag(tag) {
     query.equalTo("tags", tag);
     return query.find();
 }
-
+//------------------------------------------------------------------------------
 function updateTagRelationsToSpot(spot, tagValuesFromInputBox, user) {
     var relation = spot.relation("tags");
     relation.query().find().then(function(results) {
@@ -97,7 +99,7 @@ function updateTagRelationsToSpot(spot, tagValuesFromInputBox, user) {
     }, logErr);
 
 }
-
+//------------------------------------------------------------------------------
 function createNewTag(user, tagValue, relation, savedTagPromise) {
     var tag = new Tag();
     tag.set('user', user);
@@ -114,7 +116,7 @@ function createNewTag(user, tagValue, relation, savedTagPromise) {
     }, logErr);
     $('#tagsContainer').show();
 }
-
+//------------------------------------------------------------------------------
 function isFirstTime(user){
     return (user.get('firstName') == '' || user.get('locationName') == '' || user.get('geoPoint') == '');
 }
@@ -150,7 +152,8 @@ var GetStartedView = Parse.View.extend({
         $('#app .content').html(_.template($("#get-started-template").html()));
     }
 });
-
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 $(function() {
     var currentUser = Parse.User.current();
     if (currentUser) {
