@@ -150,6 +150,7 @@ var GetStartedView = Parse.View.extend({
     initialize: function() {
         console.log('render GetStartedView');
         $('#app .content').html(_.template($("#get-started-template").html()));
+        userSetup();
     }
 });
 //------------------------------------------------------------------------------

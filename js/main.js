@@ -176,6 +176,49 @@ function federatedLogin(federatedLoginUser) {
     });
 }
 //------------------------------------------------------------------------------
+function userSetup(){
+    var homeLocationSearchResult;
+    var mapCenterAutocomplete = new google.maps.places.Autocomplete(document.getElementById('homeLocationSearch'));
+    addAutocompleteListener(mapCenterAutocomplete, function(result) {
+        console.log(result);
+        homeLocationSearchResult = result;
+    });
+    var nameAndMapCenterStep = $('.nameAndMapCenterStep');
+    nameAndMapCenterStep.find('.btn').click(function() {
+        if (homeLocationSearchResult && $('#firstName').val()) {
+            var currentUser = Parse.User.current();
+            currentUser.set('firstName', $('#firstName').val());
+            currentUser.set('geoPoint', new Parse.GeoPoint({
+                latitude: homeLocationSearchResult.lat,
+                longitude: homeLocationSearchResult.lng
+            }));
+            var locationName = getCityFromGeocoder(homeLocationSearchResult);
+            $('#mapCenterLocationName').val(locationName);
+            currentUser.set('locationName', locationName);
+            currentUser.save().then(function(user) {
+                nameAndMapCenterStep.hide();
+                $('.locationNameStep').slideDown();
+            }, logErr);
+        } else {
+        //TODO: validation error
+        }
+    });
+    //------------------------------------------------------------------------------
+    $('#createMyMap').click(function() {
+        var locationName = $('#mapCenterLocationName').val();
+        function createMyMap() {
+            window.location.reload(false);
+        }
+        if (locationName) {
+            var currentUser = Parse.User.current();
+            currentUser.set('locationName', locationName);
+            currentUser.save().then(createMyMap, logErr);
+        } else {
+            createMyMap();
+        }
+    });
+}
+//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 $(document).ready(function() {
 
@@ -298,48 +341,8 @@ $(document).ready(function() {
 
         }
     });
-    //------------------------------------------------------------------------------
-    var homeLocationSearchResult;
-    var mapCenterAutocomplete = new google.maps.places.Autocomplete(document.getElementById('homeLocationSearch'));
-    addAutocompleteListener(mapCenterAutocomplete, function(result) {
-        console.log(result);
-        homeLocationSearchResult = result;
-    });
-    var nameAndMapCenterStep = $('.nameAndMapCenterStep');
-    nameAndMapCenterStep.find('.btn').click(function() {
-        if (homeLocationSearchResult && $('#firstName').val()) {
-            var currentUser = Parse.User.current();
-            currentUser.set('firstName', $('#firstName').val());
-            currentUser.set('geoPoint', new Parse.GeoPoint({
-                latitude: homeLocationSearchResult.lat,
-                longitude: homeLocationSearchResult.lng
-            }));
-            var locationName = getCityFromGeocoder(homeLocationSearchResult);
-            $('#mapCenterLocationName').val(locationName);
-            currentUser.set('locationName', locationName);
-            currentUser.save().then(function(user) {
-                nameAndMapCenterStep.hide();
-                $('.locationNameStep').slideDown();
-            }, logErr);
-        } else {
-            //TODO: validation error
-        }
-    });
-    //------------------------------------------------------------------------------
-    $('#createMyMap').click(function() {
-        var locationName = $('#mapCenterLocationName').val();
-        function createMyMap() {
-            window.location.reload(false);
-        }
-        if (locationName) {
-            var currentUser = Parse.User.current();
-            currentUser.set('locationName', locationName);
-            currentUser.save().then(createMyMap, logErr);
-        } else {
-            createMyMap();
-        }
-    });
-
+//------------------------------------------------------------------------------
+    
 });//end doc ready
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
