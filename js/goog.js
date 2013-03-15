@@ -110,10 +110,10 @@ function addMarker(geoPoint, spot, map) {
 //------------------------------------------------------------------------------
 function getCityFromGeocoder(geocoderResult) {
     var ac = geocoderResult.address_components;
-    for (j = 0; j < ac.length; ++j)
+    for (var j = 0; j < ac.length; ++j)
     {
         var types = ac[j].types;
-        for (k = 0; k < types.length; ++k)
+        for (var k = 0; k < types.length; ++k)
         {
             //find city
             if (types[k] === "locality")
